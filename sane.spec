@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.18
-%define release %mkrel 10
+%define release %mkrel 11
 %define beta	%nil
 #define beta	-pre1
 
@@ -49,6 +49,7 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c.bz2
 # Non-free part stripped out with
 # mkdir x; cd x; tar -xvzf ../iscan-2.1.0-1.c2.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan-2.1.0-1.c2-free.tar.bz2 *; cd ..; rm -rf x 
 Source13:	iscan-2.1.0-1.c2-free.tar.bz2
+Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
 Patch17:	sane-backends-1.0.14-perfection2450-timeout.patch
 Patch19:	http://heanet.dl.sourceforge.net/sourceforge/geniusvp2/sane-backends-1.0.15-geniusvp2-0.2.1.patch
@@ -191,6 +192,8 @@ access image acquisition devices available on the local host.
 
 %prep
 %setup -q -n sane-backends-%{version}%{beta}
+
+%patch1 -p1 -b .plusteks12
 
 # Patches for non-x86 platforms
 %ifarch sparc
@@ -403,6 +406,8 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}%{_sysconfdir}/udev/rules.d/
 %find_lang iscan
 cat iscan.lang >> sane-backends.lang
 
+sed -i '/^%dir/d' sane-backends.lang iscan.lang
+
 %post -n %{libname} -p /sbin/ldconfig
 %post -n saned
 %_post_service saned
@@ -431,7 +436,7 @@ rm -rf %{buildroot}
 %if %{primax_support}
 %{_bindir}/primax_scan
 %endif
-%{_mandir}/man1/*[^saned]
+%{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man7/*
 %dir %{_sysconfdir}/sane.d
