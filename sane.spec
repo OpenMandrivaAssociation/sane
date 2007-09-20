@@ -174,7 +174,7 @@ Provides:       %{name} = %{version}-%{release}
 Provides:	saned = %{version}-%{release}
 Requires:	sane-backends >= 1.0.15-2mdk
 Requires:	xinetd
-Prereq:         rpm-helper
+Requires(preun,post):	rpm-helper
 
 %description -n saned
 SANE (Scanner Access Now Easy) is a sane and simple interface
