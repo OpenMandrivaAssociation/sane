@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.18
-%define release %mkrel 11
+%define release %mkrel 12
 %define beta	%nil
 #define beta	-pre1
 
@@ -8,7 +8,7 @@
 %define libname %mklibname %{name} %{libmajor}
 %define	libname_devel %mklibname %{name} %{libmajor} -d
 
-%define iscanversion = 2.1.0
+%define iscanversion 2.1.0
 
 %define __libtoolize /bin/true
 
