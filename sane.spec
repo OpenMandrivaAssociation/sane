@@ -58,7 +58,6 @@ License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
 Requires:	sane-backends = %{version}-%{release}
-Buildroot:	%{_tmppath}/%{name}-%{version}-root
 BuildRequires:	X11-devel libjpeg-devel tetex-latex tetex-dvips libtiff-devel libusb-devel >= 0.1.6 libieee1284-devel
 BuildRequires:	udev-tools libgtk+2.0-devel
 %if %{gphoto2_support}
