@@ -1,8 +1,9 @@
 %define name 	sane
 %define version 1.0.18
 %define release %mkrel 12
-%define beta	%nil
+#define beta	%nil
 #define beta	-pre1
+%define beta	.20080121
 
 %define libmajor 1
 %define libname %mklibname %{name} %{libmajor}
@@ -358,7 +359,8 @@ EOF
 # Move documentation from /usr/doc to /usr/share/doc
 install -d %{buildroot}%{_docdir}/sane-backends-%version/
 install -d %{buildroot}%{_docdir}/sane-backends-doc-%version/
-pushd %{buildroot}/usr/doc/sane-%{version}
+#pushd %{buildroot}/usr/doc/sane-%{version}
+pushd %{buildroot}/usr/doc/sane-1.0.18-cvs
 mv `find -mindepth 1 -type d` *.dvi *.html *.ps *.txt %{buildroot}%{_docdir}/sane-backends-doc-%version/
 mv README README.linux %{buildroot}%{_docdir}/sane-backends-%version/
 rm -f README.*
