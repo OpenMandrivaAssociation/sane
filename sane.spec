@@ -258,7 +258,8 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 # the Makefile from generating  the real dll.conf file
 rm -f backend/dll.conf
 
-
+# (ugly, but needed) cleanup, otherwise x86_64 won't build
+rm -f tools/sane-desc.o
 
 %build
 
