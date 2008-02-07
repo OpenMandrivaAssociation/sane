@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.18
-%define release %mkrel 13
+%define release %mkrel 14
 #define beta	%nil
 #define beta	-pre1
 %define beta	.20080121
@@ -477,5 +477,3 @@ rm -rf %{buildroot}
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/xinetd.d/saned
-
-
