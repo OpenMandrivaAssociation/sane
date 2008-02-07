@@ -39,7 +39,7 @@ Summary:	SANE - local and remote scanner access
 URL:		http://www.sane-project.org/
 Source:		ftp://ftp.de.mostang.com/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.bz2
 Source3:        http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
-Source5:	saned-xinetd.bz2
+Source5:	saned-xinetd
 Source8:	sane-hotplug-usbscanner
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
@@ -392,7 +392,7 @@ cd ..
 
 # Xinetd.d entry
 mkdir %{buildroot}/etc/xinetd.d
-bzcat %{SOURCE5} > %{buildroot}/etc/xinetd.d/saned
+cat %{SOURCE5} > %{buildroot}/etc/xinetd.d/saned
 
 # udev rules and agents for libusb user support
 mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
