@@ -43,8 +43,8 @@ Source5:	saned-xinetd.bz2
 Source8:	sane-hotplug-usbscanner
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
-Source11:	http://www.geocities.com/trsh0101/SANE/primascan.h.bz2
-Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c.bz2
+Source11:	http://www.geocities.com/trsh0101/SANE/primascan.h
+Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # The free part of Epson's scanner driver package IScan, full package
 # downloaded from http://www.avasys.jp/english/linux_e/index.html
 # Non-free part stripped out with
@@ -231,8 +231,8 @@ echo 'hp_rts88xx' >> backend/dll.conf.in
 
 # "primascan" backend 
 # (commented out in dll.conf, as it claims to support every USB scanner)
-bzcat %{SOURCE11} > backend/primascan.h
-bzcat %{SOURCE12} > backend/primascan.c
+cat %{SOURCE11} > backend/primascan.h
+cat %{SOURCE12} > backend/primascan.c
 perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
 perl -p -i -e 's:(DISTFILES\s*=\s*):$1primascan.h primascan.c :' backend/Makefile.in
 echo '#primascan' >> backend/dll.conf.in
