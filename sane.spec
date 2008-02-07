@@ -9,7 +9,7 @@
 %define libname %mklibname %{name} %{libmajor}
 %define	libname_devel %mklibname %{name} %{libmajor} -d
 
-%define iscanversion 2.1.0
+%define iscanversion 2.10.0
 
 %define __libtoolize /bin/true
 
@@ -48,8 +48,8 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c.bz2
 # The free part of Epson's scanner driver package IScan, full package
 # downloaded from http://www.avasys.jp/english/linux_e/index.html
 # Non-free part stripped out with
-# mkdir x; cd x; tar -xvzf ../iscan-2.1.0-1.c2.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan-2.1.0-1.c2-free.tar.bz2 *; cd ..; rm -rf x 
-Source13:	iscan-2.1.0-1.c2-free.tar.bz2
+# mkdir x; cd x; tar -xvzf ../iscan-2.10.0-1.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan-2.10.0-1-free.tar.bz2 *; cd ..; rm -rf x
+Source13:	iscan-%{iscanversion}-1-free.tar.bz2
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
 Patch17:	sane-backends-1.0.14-perfection2450-timeout.patch
@@ -298,7 +298,7 @@ cd ..
 %if %{epkowa_support}
 chmod a+rx tools/sane-config
 PATH=`pwd`/tools:${PATH}
-cd iscan*
+cd iscan-%{iscanversion}
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 %configure --disable-frontend
@@ -380,7 +380,7 @@ cd ..
 
 # Epson Avasys driver for Epson scanners
 %if %{epkowa_support}
-cd iscan*
+cd iscan-%{iscanversion}
 %makeinstall
 rm -f %{buildroot}%{_libdir}/sane/libsane-epkowa.a
 rm -f %{buildroot}%{_mandir}/man1/iscan.1*
