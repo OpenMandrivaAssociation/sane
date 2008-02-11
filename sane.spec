@@ -1,9 +1,9 @@
 %define name 	sane
-%define version 1.0.18
-%define release %mkrel 14
-#define beta	%nil
+%define version 1.0.19
+%define release %mkrel 1
+%define beta	%nil
 #define beta	-pre1
-%define beta	.20080121
+#define beta	.20080121
 
 %define libmajor 1
 %define libname %mklibname %{name} %{libmajor}
@@ -37,7 +37,7 @@ Version:	%{version}
 Release:	%{release}
 Summary:	SANE - local and remote scanner access
 URL:		http://www.sane-project.org/
-Source:		ftp://ftp.de.mostang.com/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.bz2
+Source:		ftp://ftp.de.mostang.com/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
 Source3:        http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
 Source8:	sane-hotplug-usbscanner
@@ -234,9 +234,11 @@ echo 'hp_rts88xx' >> backend/dll.conf.in
 cat %{SOURCE11} > backend/primascan.h
 cat %{SOURCE12} > backend/primascan.c
 perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
+# <mrl> avoid autoconf by applying change to configure too.
+perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure
 perl -p -i -e 's:(DISTFILES\s*=\s*):$1primascan.h primascan.c :' backend/Makefile.in
 echo '#primascan' >> backend/dll.conf.in
-autoconf
+#autoconf
 
 # Scanners in some Brother MF devices
 #setup -q -T -D -a 10 -n sane-backends-%{version}%{beta}
