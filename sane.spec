@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 2
+%define release %mkrel 3
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -128,7 +128,7 @@ Group:		System/Kernel and hardware
 License:	LGPL
 Summary:	SANE - local and remote scanner access
 Provides:	%{name} = %{version}-%{release}
-Provides:	iscan = %{iscanversion}
+Suggests:	iscan
 
 %description backends
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -145,6 +145,30 @@ This package does not enable network scanning by default; if you wish
 to enable it, install the saned package and set up the sane-net backend.
 
 This package contains the backends for different scanners.
+
+%package backends-iscan
+Group:		System/Kernel and hardware
+License:	LGPL
+Summary:	SANE - local and remote scanner access
+Provides:	iscan = %{iscanversion}
+Conflicts:	sane-backends <= 1.0.19-2mdv
+
+%description backends-iscan
+SANE (Scanner Access Now Easy) is a sane and simple interface
+to both local and networked scanners and other image acquisition devices
+like digital still and video cameras.  SANE currently includes modules for
+accessing a range of scanners, including models from Agfa SnapScan, Apple,
+Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
+Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
+
+For the latest information on SANE, the SANE standard definition, and
+mailing list access, see http://www.mostang.com/sane/
+
+This package does not enable network scanning by default; if you wish
+to enable it, install the saned package and set up the sane-net backend.
+
+This package contains the iscan backend, in order to not conflict with
+manufacturer-supplied packages.
 
 %package backends-doc
 Summary:	Documentation for SANE backends
@@ -409,7 +433,6 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}%{_sysconfdir}/udev/rules.d/
 
 %find_lang sane-backends
 %find_lang iscan
-cat iscan.lang >> sane-backends.lang
 
 sed -i '/^%dir/d' sane-backends.lang iscan.lang
 
@@ -451,6 +474,16 @@ rm -rf %{buildroot}
 #{_sysconfdir}/udev/agents.d/usb/libusbscanner
 %{_sysconfdir}/udev/rules.d/70-libsane.rules
 %attr(1777,root,root) %dir /var/lib/lock/sane
+# iscan files
+%exclude %_libdir/sane/libsane-epkowa.*
+%exclude %_sysconfdir/sane.d/epkowa.conf
+%exclude %_mandir/man5/sane-epkowa.5*
+
+%files backends-iscan -f iscan.lang
+%defattr(-,root,root,755)
+%_libdir/sane/libsane-epkowa.*
+%_sysconfdir/sane.d/epkowa.conf
+%_mandir/man5/sane-epkowa.5*
 
 %files backends-doc
 %defattr(-,root,root,755)
