@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 3
+%define release %mkrel 4
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -11,6 +11,9 @@
 
 %define iscanversion 2.10.0
 
+# All sane backends have SONAME libsane.so.1. We do not want
+# sane-backends-iscan to provide libsane.so.1, so filter these out.
+%define _exclude_files_from_autoprov  %{_libdir}/%{name}/
 %define __libtoolize /bin/true
 
 # Setting this makes the /etc/sane.d/dll.conf empty so that scanning apps
