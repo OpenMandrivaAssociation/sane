@@ -155,6 +155,7 @@ License:	LGPL
 Summary:	SANE - local and remote scanner access
 Provides:	iscan = %{iscanversion}
 Conflicts:	sane-backends <= 1.0.19-2mdv
+Conflicts:	%{libname} <= 1.0.19-4mdv
 
 %description backends-iscan
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -478,7 +479,6 @@ rm -rf %{buildroot}
 %{_sysconfdir}/udev/rules.d/70-libsane.rules
 %attr(1777,root,root) %dir /var/lib/lock/sane
 # iscan files
-%exclude %_libdir/sane/libsane-epkowa.*
 %exclude %_sysconfdir/sane.d/epkowa.conf
 %exclude %_mandir/man5/sane-epkowa.5*
 
@@ -497,6 +497,7 @@ rm -rf %{buildroot}
 %{_libdir}/*.so.*
 %dir %{_libdir}/sane
 %{_libdir}/sane/*.so.*
+%exclude %_libdir/sane/libsane-epkowa.*
 
 %files -n %{libname_devel}
 %defattr(-,root,root,755)
