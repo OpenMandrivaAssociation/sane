@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 4
+%define release %mkrel 5
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -154,8 +154,8 @@ Group:		System/Kernel and hardware
 License:	LGPL
 Summary:	SANE - local and remote scanner access
 Provides:	iscan = %{iscanversion}
-Conflicts:	sane-backends <= 1.0.19-2mdv
-Conflicts:	%{libname} <= 1.0.19-4mdv
+Conflicts:	sane-backends < 1.0.19-3
+Conflicts:	%{libname} < 1.0.19-5
 
 %description backends-iscan
 SANE (Scanner Access Now Easy) is a sane and simple interface
