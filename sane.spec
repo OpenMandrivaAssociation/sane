@@ -451,7 +451,9 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}%{_sysconfdir}/udev/rules.d/
 
 sed -i '/^%dir/d' sane-backends.lang iscan.lang
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
 %post -n saned
 %_post_service saned
 
@@ -463,7 +465,9 @@ sed -i '/^%dir/d' sane-backends.lang iscan.lang
 %preun -n saned
 %_preun_service saned
 
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 %postun -n saned
 %_postun_userdel saned
 
