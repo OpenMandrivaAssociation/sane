@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 6
+%define release %mkrel 7
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -441,8 +441,8 @@ mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
 install -m644 tools/udev/libsane.rules %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
 # Let /etc/udev/agents.d/usb/libusbscanner script be run
 perl -p -i -e 's:GROUP="scanner":RUN+="libusbscanner":' %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
-mkdir -p %{buildroot}/%{_lib}/udev/
-install -m755 %{SOURCE8} %{buildroot}/%{_lib}/udev/libusbscanner
+mkdir -p %{buildroot}/lib/udev/
+install -m755 %{SOURCE8} %{buildroot}/lib/udev/libusbscanner
 # Shorten too long comments
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
 
@@ -489,7 +489,7 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/sane.d
 #config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
-/%{_lib}/udev/libusbscanner
+/lib/udev/libusbscanner
 #{_sysconfdir}/udev/agents.d/usb/libusbscanner
 %{_sysconfdir}/udev/rules.d/70-libsane.rules
 %attr(1777,root,root) %dir /var/lib/lock/sane
