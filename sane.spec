@@ -53,6 +53,7 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # Non-free part stripped out with
 # mkdir x; cd x; tar -xvzf ../iscan-2.10.0-1.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan-2.10.0-1-free.tar.bz2 *; cd ..; rm -rf x
 Source13:	iscan-%{iscanversion}-1-free.tar.bz2
+Patch0:		sane-backends-1.0.19-fix-str-fmt.patch
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
 Patch17:	sane-backends-1.0.14-perfection2450-timeout.patch
@@ -227,7 +228,7 @@ access image acquisition devices available on the local host.
 
 %prep
 %setup -q -n sane-backends-%{version}%{beta}
-
+%patch0 -p0
 %patch1 -p1 -b .plusteks12
 
 # Patches for non-x86 platforms
