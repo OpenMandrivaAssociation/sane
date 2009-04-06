@@ -308,9 +308,9 @@ export DONT_STRIP=1
 CFLAGS="-g" CXXFLAGS="-g" \
 %endif
 %if %{gphoto2_support}
-%configure --with-gphoto2=%{_prefix}
+%configure2_5x --with-gphoto2=%{_prefix}
 %else
-%configure --without-gphoto2
+%configure2_5x --without-gphoto2
 %endif
 
 # glibc 2.1 has stpcpy, but sane's configure is apparently unable to detect it.
@@ -328,7 +328,7 @@ cd primaxscan*
 PATH=`pwd`/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 #CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include/sane -L`pwd`/../backend/.libs/"\
-%configure
+%configure2_5x
 %make
 %make primax_scan
 cd ..
@@ -342,7 +342,7 @@ cd iscan-%{iscanversion}
 autoconf
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
-%configure --disable-frontend
+%configure2_5x --disable-frontend
 %make
 cd ..
 %endif
