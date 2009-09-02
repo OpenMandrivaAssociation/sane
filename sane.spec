@@ -64,6 +64,7 @@ Patch23:	iscan-2.10.0-1_fix_link.patch
 Patch24:	iscan-2.20.1-gcc4.4.1.patch
 Patch25:	iscan-2.20.0-glibc2.10.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
+Patch27:	iscan-2.20.1-linkage_fix.diff
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -157,7 +158,6 @@ mailing list access, see http://www.mostang.com/sane/
 
 This package does not enable network scanning by default; if you wish
 to enable it, install the saned package and set up the sane-net backend.
-
 This package contains the backends for different scanners.
 
 %package backends-iscan
@@ -335,7 +335,7 @@ make -C doc sane.ps.gz
 chmod a+rx tools/sane-config
 cd primaxscan*
 PATH=`pwd`/../tools:${PATH}
-CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/.libs/"\
+CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 #CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include/sane -L`pwd`/../backend/.libs/"\
 %configure2_5x
 %make
