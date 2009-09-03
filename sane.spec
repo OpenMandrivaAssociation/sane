@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 11
+%define release %mkrel 12
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -64,6 +64,8 @@ Patch24:	iscan-2.20.1-gcc4.4.1.patch
 Patch25:	iscan-2.20.0-glibc2.10.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.diff
+# (fc) 1.0.19-12mdv fix group for device
+Patch28:	sane-backends-1.0.19-group.patch
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -233,6 +235,7 @@ access image acquisition devices available on the local host.
 %setup -q -n sane-backends-%{version}%{beta}
 %patch0 -p0
 %patch1 -p1 -b .plusteks12
+%patch28 -p1 -b .group
 
 # Patches for non-x86 platforms
 %ifarch sparc
