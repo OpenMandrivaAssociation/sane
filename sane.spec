@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.19
-%define release %mkrel 9
+%define release %mkrel 10
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -43,7 +43,6 @@ URL:		http://www.sane-project.org/
 Source:		ftp://ftp.de.mostang.com/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
 Source3:        http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
-Source8:	sane-hotplug-usbscanner
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
 Source11:	http://www.geocities.com/trsh0101/SANE/primascan.h
@@ -443,16 +442,11 @@ cd ..
 mkdir %{buildroot}/etc/xinetd.d
 cat %{SOURCE5} > %{buildroot}/etc/xinetd.d/saned
 
-# udev rules and agents for libusb user support
-mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
-#/usr/sbin/udev_import_usermap --no-modprobe usb tools/hotplug/libsane.usermap > %{buildroot}%{_sysconfdir}/udev/rules.d/70-libusbscanner.rules
-install -m644 tools/udev/libsane.rules %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
-# Let /etc/udev/agents.d/usb/libusbscanner script be run
-perl -p -i -e 's:GROUP="scanner":RUN+="libusbscanner":' %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
-mkdir -p %{buildroot}/lib/udev/
-install -m755 %{SOURCE8} %{buildroot}/lib/udev/libusbscanner
+# udev rules for libusb user support
+mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
+install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/19-libsane.rules
 # Shorten too long comments
-perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}%{_sysconfdir}/udev/rules.d/70-libsane.rules
+perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/19-libsane.rules
 
 %find_lang sane-backends
 %find_lang iscan
@@ -497,9 +491,7 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/sane.d
 #config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
-/lib/udev/libusbscanner
-#{_sysconfdir}/udev/agents.d/usb/libusbscanner
-%{_sysconfdir}/udev/rules.d/70-libsane.rules
+%{_sysconfdir}/udev/rules.d/*-libsane.rules
 %attr(1777,root,root) %dir /var/lib/lock/sane
 # iscan files
 %exclude %_sysconfdir/sane.d/epkowa.conf
