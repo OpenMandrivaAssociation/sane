@@ -65,6 +65,8 @@ Patch27:	iscan-2.20.1-linkage_fix.diff
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
 Patch29:	sane-backends-1.0.20-primascan.patch
+# (fc) list Brother MFC-260C as supported (Mdv bug # 52951)
+Patch30:	sane-backends-1.0.20-mfc260c.patch
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -235,6 +237,7 @@ access image acquisition devices available on the local host.
 %patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
 %patch28 -p1 -b .group
+%patch29 -p1 -b .mfc260c
 
 # Patches for non-x86 platforms
 %ifarch sparc
