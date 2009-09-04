@@ -1,6 +1,6 @@
 %define name 	sane
-%define version 1.0.19
-%define release %mkrel 12
+%define version 1.0.20
+%define release %mkrel 1
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -21,7 +21,7 @@
 # slow (the user or "scannerdrake" has to insert the names of the really
 # installed scanners then)
 %define empty_dll_conf 0
-# Backend maintainer says to leave gphoto2 disabled for now.
+
 %define gphoto2_support 1
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
@@ -32,15 +32,13 @@
 %ifarch alpha ppc sparc
 %define primax_support 0
 %endif
-# Enable debug mode
-%define debug 0
 
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Summary:	SANE - local and remote scanner access
 URL:		http://www.sane-project.org/
-Source:		ftp://ftp.de.mostang.com/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
+Source:		ftp://ftp.sane-project.org/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
 Source3:        http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
@@ -52,11 +50,10 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # Non-free part stripped out with
 # mkdir x; cd x; tar -xvzf ../iscan_2.20.1-1.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.20.1-1-free.tar.bz2 *; cd ..; rm -rf x
 Source13:	iscan-%{iscanversion}-1-free.tar.bz2
+Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
 Patch0:		sane-backends-1.0.19-fix-str-fmt.patch
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
-Patch17:	sane-backends-1.0.14-perfection2450-timeout.patch
-Patch19:	http://heanet.dl.sourceforge.net/sourceforge/geniusvp2/sane-backends-1.0.15-geniusvp2-0.2.1.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
@@ -65,7 +62,9 @@ Patch25:	iscan-2.20.0-glibc2.10.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.diff
 # (fc) 1.0.19-12mdv fix group for device
-Patch28:	sane-backends-1.0.19-group.patch
+Patch28:	sane-backends-1.0.20-group.patch
+# (fc) 1.0.20-1mdv primascan build support
+Patch29:	sane-backends-1.0.20-primascan.patch
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -233,7 +232,7 @@ access image acquisition devices available on the local host.
 
 %prep
 %setup -q -n sane-backends-%{version}%{beta}
-%patch0 -p0
+%patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
 %patch28 -p1 -b .group
 
@@ -243,27 +242,24 @@ access image acquisition devices available on the local host.
 %endif
 
 # "geniusvp2" backend
-#patch19 -p1 -b .geniusvp2
+#setup -q -T -D -a 14 -n sane-backends-%{version}
 
 # "hp3500" backend
 # Patch does not match on file unsupported.desc (change should not affect
 # the backend itself), so we force it in
 #bzcat %{PATCH20} | patch -p0 -b --suffix .hp3500 -f || :
 
-# Patch to fix USB timeout issues on "epson" backend.
-#patch17 -p0 -b .fixepsonusbtimeout
-
 # Fix parallel build (Gwenole)
-for a in `find . -name Makefile.in -print`; do \
-	perl -p -i -e 's/^(\s*TARGETS\s+=\s+)(\S+)(\s+)(\$\(\S+_LTOBJS\))/$1$4$3$2/' $a; \
-done
+#for a in `find . -name Makefile.in -print`; do \
+#	perl -p -i -e 's/^(\s*TARGETS\s+=\s+)(\S+)(\s+)(\$\(\S+_LTOBJS\))/$1$4$3$2/' $a; \
+#done
 
 # Patch for the HP ScanJet 44x0C scanners ("hp_rts88xx" backend)
 %setup -q -T -D -a 9 -n sane-backends-%{version}%{beta}
 cd sane_hp_rts88xx/sane_hp_rts88xx
 ./patch-sane.sh $RPM_BUILD_DIR/sane-backends-%{version}%{beta}
 cd ../..
-%patch21 -p1 -b .hp_rts88xx-0.18-fix_link
+#patch21 -p1 -b .hp_rts88xx-0.18-fix_link
 echo 'hp_rts88xx' >> backend/dll.conf.in
 
 # Primax parallel port scanners
@@ -273,14 +269,15 @@ echo 'hp_rts88xx' >> backend/dll.conf.in
 
 # "primascan" backend 
 # (commented out in dll.conf, as it claims to support every USB scanner)
+%patch29 -p1 -b .primascan
 cat %{SOURCE11} > backend/primascan.h
 cat %{SOURCE12} > backend/primascan.c
-perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
+##perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
 # <mrl> avoid autoconf by applying change to configure too.
-perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure
-perl -p -i -e 's:(DISTFILES\s*=\s*):$1primascan.h primascan.c :' backend/Makefile.in
+##perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure
+##perl -p -i -e 's:(DISTFILES\s*=\s*):$1primascan.h primascan.c :' backend/Makefile.in
 echo '#primascan' >> backend/dll.conf.in
-#autoconf
+autoreconf
 
 # Scanners in some Brother MF devices
 #setup -q -T -D -a 10 -n sane-backends-%{version}%{beta}
@@ -310,27 +307,17 @@ popd
 # the Makefile from generating  the real dll.conf file
 rm -f backend/dll.conf
 
-# (ugly, but needed) cleanup, otherwise x86_64 won't build
-rm -f tools/sane-desc.o
-
 %build
 
-%if %debug
-export DONT_STRIP=1
-CFLAGS="-g" CXXFLAGS="-g" \
-%endif
-%if %{gphoto2_support}
-%configure2_5x --with-gphoto2=%{_prefix}
-%else
-%configure2_5x --without-gphoto2
+%configure2_5x \
+%if !%{gphoto2_support}
+ --without-gphoto2
 %endif
 
-# glibc 2.1 has stpcpy, but sane's configure is apparently unable to detect it.
-perl -p -i -e "s|\/\* #undef HAVE_STPCPY \*\/|#define HAVE_STPCPY 1|" include/sane/config.h
 
 # Do not use macros here (with percent in the beginning) as parallelized
 # build does not work
-make
+%make
 make -C doc sane.ps.gz
 
 # Primax parallel port scanners
@@ -361,10 +348,6 @@ cd ..
 %endif
 
 %install
-
-%if %debug
-export DONT_STRIP=1
-%endif
 
 rm -rf %{buildroot}
 %makeinstall
