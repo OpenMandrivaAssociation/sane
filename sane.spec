@@ -238,7 +238,7 @@ access image acquisition devices available on the local host.
 %patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
 %patch28 -p1 -b .group
-%patch29 -p1 -b .mfc260c
+%patch30 -p1 -b .mfc260c
 
 # Patches for non-x86 platforms
 %ifarch sparc
