@@ -356,7 +356,7 @@ cd ..
 %install
 
 rm -rf %{buildroot}
-%makeinstall
+%makeinstall_std
 
 # Create missing lock dir
 install -d %{buildroot}/var/lib/lock/sane
