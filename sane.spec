@@ -330,7 +330,6 @@ rm -f backend/dll.conf
 # Do not use macros here (with percent in the beginning) as parallelized
 # build does not work
 %make
-make -C doc sane.ps.gz
 
 # Primax parallel port scanners
 %if %{primax_support}
