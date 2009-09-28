@@ -403,7 +403,7 @@ install -d %{buildroot}%{_docdir}/sane-backends-%version/
 install -d %{buildroot}%{_docdir}/sane-backends-doc-%version/
 pushd %{buildroot}/usr/doc/sane-%{version}
 #pushd %{buildroot}/usr/doc/sane-1.0.18-cvs
-mv `find -mindepth 1 -type d` *.dvi *.html *.ps *.txt %{buildroot}%{_docdir}/sane-backends-doc-%version/
+mv `find -mindepth 1 -type d` *.html *.ps *.txt %{buildroot}%{_docdir}/sane-backends-doc-%version/
 mv README README.linux %{buildroot}%{_docdir}/sane-backends-%version/
 rm -f README.*
 mv * %{buildroot}%{_docdir}/sane-backends-%version/
