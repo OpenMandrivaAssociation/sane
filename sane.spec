@@ -61,7 +61,7 @@ Patch23:	iscan-2.10.0-1_fix_link.patch
 Patch24:	iscan-2.20.1-gcc4.4.1.patch
 Patch25:	iscan-2.20.0-glibc2.10.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
-Patch27:	iscan-2.20.1-linkage_fix.diff
+Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
@@ -311,7 +311,7 @@ pushd iscan-%{iscanversion}
 %patch24 -p0 -b .gcc4.4.1
 %patch25 -p1 -b .glibc2.10
 %patch26 -p0 -b .no_non-free_please
-%patch27 -p0 -b .linkage_fix
+%patch27 -p2 -b .linkage_fix
 popd
 %endif
 
