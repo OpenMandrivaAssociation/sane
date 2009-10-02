@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 2
+%define release %mkrel 3
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -9,7 +9,7 @@
 %define libname %mklibname %{name} %{libmajor}
 %define	libname_devel %mklibname %{name} %{libmajor} -d
 
-%define iscanversion 2.20.1
+%define iscanversion 2.21.0
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
@@ -49,8 +49,8 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # The free part of Epson's scanner driver package IScan, full package
 # downloaded from http://www.avasys.jp/english/linux_e/index.html
 # Non-free part stripped out with
-# mkdir x; cd x; tar -xvzf ../iscan_2.20.1-1.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.20.1-1-free.tar.bz2 *; cd ..; rm -rf x
-Source13:	iscan-%{iscanversion}-1-free.tar.bz2
+# mkdir x; cd x; tar -xvzf ../iscan_2.21.0-6.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.21.0-6-free.tar.bz2 *; cd ..; rm -rf x
+Source13:	iscan-%{iscanversion}-6-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
 Patch0:		sane-backends-1.0.19-fix-str-fmt.patch
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
@@ -58,17 +58,17 @@ Patch9: 	sane-sparc.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
-Patch24:	iscan-2.20.1-gcc4.4.1.patch
-Patch25:	iscan-2.20.0-glibc2.10.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
 Patch29:	sane-backends-1.0.20-primascan.patch
-# (fc) list Brother MFC-260C as supported (Mdv bug # 52951)
-Patch30:	sane-backends-1.0.20-mfc260c.patch
+# (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
+Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.20-strformat.patch
+# (fc) update epson scanner list (GIT)
+Patch32:	sane-backends-1.0.20-iscan-2.21.0.patch
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -243,8 +243,9 @@ access image acquisition devices available on the local host.
 %patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
 %patch28 -p1 -b .group
-%patch30 -p1 -b .mfc260c
+%patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
+%patch32 -p1 -b .epson-update
 
 # Patches for non-x86 platforms
 %ifarch sparc
@@ -308,8 +309,6 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 %if %epkowa_support
 pushd iscan-%{iscanversion}
 %patch23 -p0 -b .iscan-2.10.0-1_fix_link
-%patch24 -p0 -b .gcc4.4.1
-%patch25 -p1 -b .glibc2.10
 %patch26 -p0 -b .no_non-free_please
 %patch27 -p2 -b .linkage_fix
 popd
