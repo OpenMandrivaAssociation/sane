@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 3
+%define release %mkrel 4
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
