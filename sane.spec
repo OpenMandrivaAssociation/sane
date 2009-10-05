@@ -69,6 +69,57 @@ Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.20-strformat.patch
 # (fc) update epson scanner list (GIT)
 Patch32:	sane-backends-1.0.20-iscan-2.21.0.patch
+
+# Debian patches
+# new build system breaks build when using pthreads.
+Patch101:       01_missing_pthreads.dpatch
+# only link the frontends with the libraries they need.
+Patch102:       02_frontends_libs.dpatch
+# reduce libsane.so deps to the bare minimum.
+Patch103:       03_libsane_deps.dpatch
+# fix udev rules, use ATTRS instead of ATTR
+Patch104:       04_udev_rules_fix.dpatch
+# fix a possible net backend hang when saned is run in debug
+# mode. Could also happen in standalone mode, but a lot less likely.
+Patch105:       05_saned_avahi_fds_fix.dpatch
+# add back SANE_CAP_ALWAYS_SETTABLE which was mistakenly
+# removed from SANE 1.0.20
+Patch106:       06_cap_always_settable.dpatch
+# fix sane_find_scanner build on kFreeBSD by adding missing SCSI
+# libraries. From upstream via Aurélien JARNO 
+Patch107:       07_tools_missing_libcam.dpatch
+# fix USB IDs for the CardScan 800c
+Patch108:       08_cardscan_usbids.dpatch
+# Update es translation and add new gl translation, courtesy of
+# Miguel Bouzada <mbouzada@gmail.com>.
+Patch109:       09_po_update_es_add_gl.dpatch
+# from git, favour the interface detected by sanei_usb_init(). This
+# helps with some machines like the Canon MP730.
+Patch110:       10_sanei_usb_update.dpatch
+# Use fedora's patch to remove rpath
+#Patch111:       20_disable_rpath.dpatch
+#Patch112:       21_sane-config.in_no_rpath.dpatch
+# Patch to the dll backend to look for pieces of dll.conf inside the
+# /etc/sane.d/dll.d/ directory. This is a facility for packages providing
+# external backends (like libsane-extras, hpoj and hplip).
+Patch113:       22_dll_backend_conf.dpatch
+# do not install OS-specific READMEs.
+Patch114:       23_unneeded_doc.dpatch
+Patch115:       24_sane-desc.c_debian_mods.dpatch
+# add USB IDs for various Samsung-branded MFPs
+Patch116:       30_xerox_samsung_ids
+# Add missing check when logging raw data.
+Patch117:	31_genesys_raw_log_fix.dpatch
+
+# Fedora patches
+Patch200: sane-backends-1.0.20-rpath.patch
+Patch201: sane-backends-1.0.20-pkgconfig.patch
+Patch202: sane-backends-1.0.20-open-macro.patch
+Patch203: sane-backends-1.0.20-hal.patch
+Patch204: sane-backends-1.0.20-man-utf8.patch
+Patch205: sane-backends-1.0.20-epson-expression800.patch
+
+
 License: 	GPL
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
@@ -247,6 +298,33 @@ access image acquisition devices available on the local host.
 %patch31 -p1 -b .strformat
 %patch32 -p1 -b .epson-update
 
+%patch101 -p1
+%patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
+%patch106 -p1
+%patch107 -p1
+%patch108 -p1
+%patch109 -p1
+%patch110 -p1
+#%patch111 -p1
+#%patch112 -p1
+%patch113 -p1
+%patch114 -p1
+%patch115 -p1
+%patch116 -p1
+%patch117 -p1
+
+# Fedora patches
+%patch200 -p1 -b .rpath
+%patch201 -p1 -b .pkgconfig
+%patch202 -p1 -b .open-macro
+%patch203 -p1 -b .hal
+%patch204 -p1 -b .man-utf8
+%patch205 -p1 -b .epson-expression800
+
+
 # Patches for non-x86 platforms
 %ifarch sparc
 %patch9 -p1 -b .sparc
@@ -266,12 +344,12 @@ access image acquisition devices available on the local host.
 #done
 
 # Patch for the HP ScanJet 44x0C scanners ("hp_rts88xx" backend)
-%setup -q -T -D -a 9 -n sane-backends-%{version}%{beta}
-cd sane_hp_rts88xx/sane_hp_rts88xx
-./patch-sane.sh $RPM_BUILD_DIR/sane-backends-%{version}%{beta}
-cd ../..
+#%setup -q -T -D -a 9 -n sane-backends-%{version}%{beta}
+#cd sane_hp_rts88xx/sane_hp_rts88xx
+#./patch-sane.sh $RPM_BUILD_DIR/sane-backends-%{version}%{beta}
+#cd ../..
 #patch21 -p1 -b .hp_rts88xx-0.18-fix_link
-echo 'hp_rts88xx' >> backend/dll.conf.in
+#echo 'hp_rts88xx' >> backend/dll.conf.in
 
 # Primax parallel port scanners
 %if %{primax_support}
@@ -321,6 +399,7 @@ rm -f backend/dll.conf
 %build
 
 %configure2_5x \
+  --enable-rpath=no \
 %if !%{gphoto2_support}
  --without-gphoto2
 %endif
@@ -491,6 +570,7 @@ rm -rf %{buildroot}
 %{_mandir}/man5/*
 %{_mandir}/man7/*
 %dir %{_sysconfdir}/sane.d
+%dir %{_sysconfdir}/sane.d/dll.d
 #config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
 %{_sysconfdir}/udev/rules.d/*-libsane.rules
@@ -534,6 +614,7 @@ rm -rf %{buildroot}
 %{_libdir}/sane/*.la
 %{_libdir}/sane/*.so
 %{_includedir}/sane
+%{_libdir}/pkgconfig/sane-backends.pc
 
 %files -n saned
 %defattr(-,root,root,755)
