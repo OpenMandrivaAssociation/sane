@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 4
+%define release %mkrel 5
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -110,6 +110,8 @@ Patch115:       24_sane-desc.c_debian_mods.dpatch
 Patch116:       30_xerox_samsung_ids
 # Add missing check when logging raw data.
 Patch117:	31_genesys_raw_log_fix.dpatch
+# use ubuntu udev rules 
+Patch118:	ubuntu_udev_noperm.dpatch
 
 # Fedora patches
 Patch200: sane-backends-1.0.20-rpath.patch
@@ -118,7 +120,6 @@ Patch202: sane-backends-1.0.20-open-macro.patch
 Patch203: sane-backends-1.0.20-hal.patch
 Patch204: sane-backends-1.0.20-man-utf8.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
-
 
 License: 	GPL
 Group:		Graphics
@@ -315,6 +316,7 @@ access image acquisition devices available on the local host.
 %patch115 -p1
 %patch116 -p1
 %patch117 -p1
+%patch118 -p1 -b .ubuntu-udev
 
 # Fedora patches
 %patch200 -p1 -b .rpath
@@ -520,9 +522,9 @@ cat %{SOURCE5} > %{buildroot}/etc/xinetd.d/saned
 
 # udev rules for libusb user support
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
-install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/19-libsane.rules
+install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 # Shorten too long comments
-perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/19-libsane.rules
+perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 
 %find_lang sane-backends
 %if %epkowa_support
