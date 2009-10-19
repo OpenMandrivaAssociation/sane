@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 6
+%define release %mkrel 7
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -226,6 +226,7 @@ Summary:	SANE - local and remote scanner access
 Provides:	iscan = %{iscanversion}
 Conflicts:	sane-backends < 1.0.19-3
 Conflicts:	%{libname} < 1.0.19-5
+Conflicts:	%{libname_devel} < 1.0.20-7
 
 %description backends-iscan
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -617,6 +618,9 @@ rm -rf %{buildroot}
 %{_libdir}/sane/*.so
 %{_includedir}/sane
 %{_libdir}/pkgconfig/sane-backends.pc
+%if %epkowa_support
+%exclude %_libdir/sane/libsane-epkowa*
+%endif
 
 %files -n saned
 %defattr(-,root,root,755)
