@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 8
+%define release %mkrel 9
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -23,6 +23,7 @@
 %define empty_dll_conf 0
 
 %define gphoto2_support 1
+%define v4l_support 1
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
 %define primax_support 1
@@ -121,7 +122,9 @@ Patch203: sane-backends-1.0.20-hal.patch
 Patch204: sane-backends-1.0.20-man-utf8.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
 
-License: 	GPL
+# lib/ is LGPLv2+, backends are GPLv2+ with exceptions
+# Tools are GPLv2+, docs are public domain
+License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
 Requires:	sane-backends = %{version}-%{release}
@@ -133,9 +136,14 @@ BuildRequires:	gettext-devel
 %if %{gphoto2_support}
 BuildRequires:	gphoto2-devel
 %endif
+%if %{v4l_support}
+BuildRequires:	libv4l-devel
+%endif
 %if %{epkowa_support}
 BuildRequires:	autoconf
 %endif
+# ensure resmgr is not pulled
+BuildConflicts: resmgr-devel
 
 %description
 SANE (Scanner Access Now Easy) is a sane and simple interface
