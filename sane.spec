@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.20
-%define release %mkrel 9
+%define release %mkrel 10
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -70,6 +70,8 @@ Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.20-strformat.patch
 # (fc) update epson scanner list (GIT)
 Patch32:	sane-backends-1.0.20-iscan-2.21.0.patch
+# (fwang) drop unsued libs from libsane.la
+Patch33:	sane-backends-1.0.20-drop-unused-libs.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -307,6 +309,7 @@ access image acquisition devices available on the local host.
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
 %patch32 -p1 -b .epson-update
+%patch33 -p1 -b .link
 
 %patch101 -p1
 %patch102 -p1
