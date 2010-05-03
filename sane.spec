@@ -1,6 +1,6 @@
 %define name 	sane
-%define version 1.0.20
-%define release %mkrel 10
+%define version 1.0.21
+%define release %mkrel 1
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -64,14 +64,10 @@ Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
-Patch29:	sane-backends-1.0.20-primascan.patch
+Patch29:	sane-backends-1.0.21-primascan.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.20-strformat.patch
-# (fc) update epson scanner list (GIT)
-Patch32:	sane-backends-1.0.20-iscan-2.21.0.patch
-# (fwang) drop unsued libs from libsane.la
-Patch33:	sane-backends-1.0.20-drop-unused-libs.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -80,25 +76,12 @@ Patch101:       01_missing_pthreads.dpatch
 Patch102:       02_frontends_libs.dpatch
 # reduce libsane.so deps to the bare minimum.
 Patch103:       03_libsane_deps.dpatch
-# fix udev rules, use ATTRS instead of ATTR
-Patch104:       04_udev_rules_fix.dpatch
-# fix a possible net backend hang when saned is run in debug
-# mode. Could also happen in standalone mode, but a lot less likely.
-Patch105:       05_saned_avahi_fds_fix.dpatch
 # add back SANE_CAP_ALWAYS_SETTABLE which was mistakenly
 # removed from SANE 1.0.20
 Patch106:       06_cap_always_settable.dpatch
-# fix sane_find_scanner build on kFreeBSD by adding missing SCSI
-# libraries. From upstream via Aurélien JARNO 
-Patch107:       07_tools_missing_libcam.dpatch
-# fix USB IDs for the CardScan 800c
-Patch108:       08_cardscan_usbids.dpatch
 # Update es translation and add new gl translation, courtesy of
 # Miguel Bouzada <mbouzada@gmail.com>.
 Patch109:       09_po_update_es_add_gl.dpatch
-# from git, favour the interface detected by sanei_usb_init(). This
-# helps with some machines like the Canon MP730.
-Patch110:       10_sanei_usb_update.dpatch
 # Use fedora's patch to remove rpath
 #Patch111:       20_disable_rpath.dpatch
 #Patch112:       21_sane-config.in_no_rpath.dpatch
@@ -109,19 +92,12 @@ Patch113:       22_dll_backend_conf.dpatch
 # do not install OS-specific READMEs.
 Patch114:       23_unneeded_doc.dpatch
 Patch115:       24_sane-desc.c_debian_mods.dpatch
-# add USB IDs for various Samsung-branded MFPs
-Patch116:       30_xerox_samsung_ids
-# Add missing check when logging raw data.
-Patch117:	31_genesys_raw_log_fix.dpatch
 # use ubuntu udev rules 
 Patch118:	ubuntu_udev_noperm.dpatch
 
 # Fedora patches
-Patch200: sane-backends-1.0.20-rpath.patch
-Patch201: sane-backends-1.0.20-pkgconfig.patch
 Patch202: sane-backends-1.0.20-open-macro.patch
 Patch203: sane-backends-1.0.20-hal.patch
-Patch204: sane-backends-1.0.20-man-utf8.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
 
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
@@ -308,35 +284,23 @@ access image acquisition devices available on the local host.
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
-%patch32 -p1 -b .epson-update
-%patch33 -p1 -b .link
 
 %patch101 -p1
 %patch102 -p1
 %patch103 -p1
-%patch104 -p1
-%patch105 -p1
 %patch106 -p1
-%patch107 -p1
-%patch108 -p1
-%patch109 -p1
-%patch110 -p1
+#%patch109 -p1
 #%patch111 -p1
 #%patch112 -p1
 %patch113 -p1
 %patch114 -p1
 %patch115 -p1
-%patch116 -p1
-%patch117 -p1
 %patch118 -p1 -b .ubuntu-udev
 
 # Fedora patches
-%patch200 -p1 -b .rpath
-%patch201 -p1 -b .pkgconfig
 %patch202 -p1 -b .open-macro
-%patch203 -p1 -b .hal
-%patch204 -p1 -b .man-utf8
-%patch205 -p1 -b .epson-expression800
+#%patch203 -p1 -b .hal
+%patch205 -p0 -b .epson-expression800
 
 
 # Patches for non-x86 platforms
@@ -372,7 +336,7 @@ access image acquisition devices available on the local host.
 
 # "primascan" backend 
 # (commented out in dll.conf, as it claims to support every USB scanner)
-%patch29 -p1 -b .primascan
+%patch29 -p0 -b .primascan
 cat %{SOURCE11} > backend/primascan.h
 cat %{SOURCE12} > backend/primascan.c
 ##perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
@@ -628,7 +592,6 @@ rm -rf %{buildroot}
 %{_libdir}/sane/*.la
 %{_libdir}/sane/*.so
 %{_includedir}/sane
-%{_libdir}/pkgconfig/sane-backends.pc
 %if %epkowa_support
 %exclude %_libdir/sane/libsane-epkowa*
 %endif
