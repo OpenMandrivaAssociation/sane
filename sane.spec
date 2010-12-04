@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.21
-%define release %mkrel 3
+%define release %mkrel 4
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -59,6 +59,7 @@ Patch9: 	sane-sparc.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
+Patch24:	sane-backend-1.0.21-link.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
@@ -281,6 +282,7 @@ access image acquisition devices available on the local host.
 %setup -q -n sane-backends-%{version}%{beta}
 %patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
+%patch24 -p0 -b .link
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
