@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.21
-%define release %mkrel 4
+%define release %mkrel 5
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -59,7 +59,7 @@ Patch9: 	sane-sparc.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
-Patch24:	sane-backend-1.0.21-link.patch
+Patch24:	sane-backends-1.0.21-link.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
