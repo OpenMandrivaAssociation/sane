@@ -108,10 +108,16 @@ Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
 Requires:	sane-backends = %{version}-%{release}
 Buildroot:	%{_tmppath}/%{name}-%{version}-root
-BuildRequires:	X11-devel libjpeg-devel tetex-latex tetex-dvips libtiff-devel libusb-devel >= 0.1.6 libieee1284-devel
-BuildRequires:	udev-tools libgtk+2.0-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	tiff-devel
+BuildRequires:	libusb-devel
+BuildRequires:	libieee1284-devel
+BuildRequires:	libltdl-devel
+BuildRequires:	tetex-latex
+BuildRequires:	tetex-dvips
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
+BuildRequires:	libgtk+2.0-devel
 %if %{gphoto2_support}
 BuildRequires:	gphoto2-devel
 %endif
