@@ -84,8 +84,6 @@ Patch106:       06_cap_always_settable.dpatch
 # Miguel Bouzada <mbouzada@gmail.com>.
 Patch109:       09_po_update_es_add_gl.dpatch
 # Use fedora's patch to remove rpath
-#Patch111:       20_disable_rpath.dpatch
-#Patch112:       21_sane-config.in_no_rpath.dpatch
 # Patch to the dll backend to look for pieces of dll.conf inside the
 # /etc/sane.d/dll.d/ directory. This is a facility for packages providing
 # external backends (like libsane-extras, hpoj and hplip).
@@ -298,8 +296,6 @@ access image acquisition devices available on the local host.
 %patch103 -p1
 %patch106 -p1
 #%patch109 -p1
-#%patch111 -p1
-#%patch112 -p1
 %patch113 -p1
 %patch114 -p1
 %patch115 -p1
