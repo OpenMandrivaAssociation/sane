@@ -1,6 +1,6 @@
 %define name 	sane
-%define version 1.0.21
-%define release %mkrel 6
+%define version 1.0.22
+%define release %mkrel 1
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -53,7 +53,6 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # mkdir x; cd x; tar -xvzf ../iscan_2.21.0-6.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.21.0-6-free.tar.bz2 *; cd ..; rm -rf x
 Source13:	iscan_%{iscanversion}-4-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
-Patch0:		sane-backends-1.0.19-fix-str-fmt.patch
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
@@ -65,10 +64,10 @@ Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
-Patch29:	sane-backends-1.0.21-primascan.patch
+Patch29:	sane-backends-1.0.22-primascan.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch30:	sane-backends-1.0.20-brother2list.patch
-Patch31:	sane-backends-1.0.20-strformat.patch
+Patch31:	sane-backends-1.0.22-strformat.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -98,6 +97,7 @@ Patch118:	ubuntu_udev_noperm.dpatch
 Patch202: sane-backends-1.0.20-open-macro.patch
 Patch203: sane-backends-1.0.20-hal.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
+Patch206: sane-backends-1.0.22-v4l.patch
 
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
@@ -284,7 +284,6 @@ access image acquisition devices available on the local host.
 
 %prep
 %setup -q -n sane-backends-%{version}%{beta}
-%patch0 -p0 -b .string-format
 %patch1 -p1 -b .plusteks12
 %patch24 -p0 -b .link
 %patch28 -p1 -b .group
@@ -292,7 +291,7 @@ access image acquisition devices available on the local host.
 %patch31 -p1 -b .strformat
 
 %patch101 -p1
-%patch102 -p1
+#patch102 -p1
 %patch103 -p1
 %patch106 -p1
 #%patch109 -p1
@@ -305,6 +304,7 @@ access image acquisition devices available on the local host.
 %patch202 -p1 -b .open-macro
 #%patch203 -p1 -b .hal
 %patch205 -p0 -b .epson-expression800
+%patch206 -p1 -b .v4l
 
 
 # Patches for non-x86 platforms
@@ -348,7 +348,7 @@ cat %{SOURCE12} > backend/primascan.c
 ##perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure
 ##perl -p -i -e 's:(DISTFILES\s*=\s*):$1primascan.h primascan.c :' backend/Makefile.in
 echo '#primascan' >> backend/dll.conf.in
-autoreconf
+autoreconf -fi
 
 # Scanners in some Brother MF devices
 #setup -q -T -D -a 10 -n sane-backends-%{version}%{beta}
