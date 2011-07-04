@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.22
-%define release %mkrel 1
+%define release %mkrel 2
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -68,7 +68,7 @@ Patch29:	sane-backends-1.0.22-primascan.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.22-strformat.patch
-
+Patch32:	add-mp495.patch
 # Debian patches
 # new build system breaks build when using pthreads.
 Patch101:       01_missing_pthreads.dpatch
@@ -289,6 +289,7 @@ access image acquisition devices available on the local host.
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
+%patch32 -p0 -b .mp495
 
 %patch101 -p1
 #patch102 -p1
