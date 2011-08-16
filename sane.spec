@@ -1,6 +1,6 @@
 %define name 	sane
 %define version 1.0.22
-%define release %mkrel 2
+%define release %mkrel 3
 %define beta	%nil
 #define beta	-pre1
 #define beta	.20080121
@@ -525,8 +525,9 @@ sed -i '/^%dir/d' iscan.lang
 
 %pre -n saned
 # Add saned to group cdwriter and ub for scanner access.
-/usr/sbin/useradd -r -M -s /bin/false  -c "system user for saned" saned -G cdwriter,usb || :
-#%_pre_useradd saned /etc/sane.d /bin/false
+#/usr/sbin/useradd -r -M -s /bin/false  -c "system user for saned" saned -G cdwriter,usb || :
+%_pre_useradd saned /etc/sane.d /bin/false
+/usr/sbin/usermod -G cdwriter,usb saned
 
 %preun -n saned
 %_preun_service saned
