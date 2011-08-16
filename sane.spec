@@ -124,6 +124,7 @@ BuildRequires:	libv4l-devel
 %endif
 %if %{epkowa_support}
 BuildRequires:	autoconf
+BuildRequires:	automake
 %endif
 # ensure resmgr is not pulled
 BuildConflicts: resmgr-devel
