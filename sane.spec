@@ -1,13 +1,6 @@
-%define name 	sane
-%define version 1.0.22
-%define release %mkrel 3
-%define beta	%nil
-#define beta	-pre1
-#define beta	.20080121
-
 %define libmajor 1
 %define libname %mklibname %{name} %{libmajor}
-%define	libname_devel %mklibname %{name} %{libmajor} -d
+%define	develname %mklibname %{name} %{libmajor} -d
 
 %define iscanversion 2.24.0
 
@@ -35,13 +28,17 @@
 %define epkowa_support 0
 %endif
 
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		sane
+Version:	1.0.22
+Release:	4
 Summary:	SANE - local and remote scanner access
+# lib/ is LGPLv2+, backends are GPLv2+ with exceptions
+# Tools are GPLv2+, docs are public domain
+License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
+Group:		Graphics
 URL:		http://www.sane-project.org/
 Source:		ftp://ftp.sane-project.org/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
-Source3:        http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
+Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
@@ -99,13 +96,9 @@ Patch203: sane-backends-1.0.20-hal.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
 Patch206: sane-backends-1.0.22-v4l.patch
 
-# lib/ is LGPLv2+, backends are GPLv2+ with exceptions
-# Tools are GPLv2+, docs are public domain
-License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
-Group:		Graphics
 Requires:	%{libname} = %{version}-%{release}
 Requires:	sane-backends = %{version}-%{release}
-Buildroot:	%{_tmppath}/%{name}-%{version}-root
+
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	libusb-devel
@@ -163,7 +156,7 @@ mailing list access, see http://www.mostang.com/sane/
 This package does not enable network scanning by default; if you wish
 to enable it, install the saned package.
 
-%package -n %{libname_devel}
+%package -n %{develname}
 Group: 		Development/C
 License:	LGPL
 Summary: 	SANE - local and remote scanner access
@@ -172,7 +165,7 @@ Provides: 	libsane-devel = %{version}-%{release}
 Provides:	sane-devel = %{version}-%{release}
 Obsoletes: 	sane-devel
 
-%description -n %{libname_devel}
+%description -n %{develname}
 SANE (Scanner Access Now Easy) is a sane and simple interface
 to both local and networked scanners and other image acquisition devices
 like digital still and video cameras.  SANE currently includes modules for
@@ -218,7 +211,7 @@ Summary:	SANE - local and remote scanner access
 Provides:	iscan = %{iscanversion}
 Conflicts:	sane-backends < 1.0.19-3
 Conflicts:	%{libname} < 1.0.19-5
-Conflicts:	%{libname_devel} < 1.0.20-7
+Conflicts:	%{develname} < 1.0.20-7
 
 %description backends-iscan
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -381,11 +374,11 @@ popd
 rm -f backend/dll.conf
 
 %build
-
 %configure2_5x \
-  --enable-rpath=no \
+	--disble-static \
+	--enable-rpath=no \
 %if !%{gphoto2_support}
- --without-gphoto2
+	--without-gphoto2
 %endif
 
 
@@ -400,7 +393,9 @@ cd primaxscan*
 PATH=`pwd`/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 #CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include/sane -L`pwd`/../backend/.libs/"\
-%configure2_5x
+%configure2_5x \
+	--disble-static
+
 %make
 %make primax_scan
 cd ..
@@ -415,13 +410,14 @@ cd iscan-%{iscanversion}
 sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
-%configure2_5x --disable-frontend
+%configure2_5x \
+	--disble-static \
+	--disable-frontend
 %make
 cd ..
 %endif
 
 %install
-
 rm -rf %{buildroot}
 %makeinstall_std
 
@@ -461,9 +457,6 @@ cat > %{buildroot}%{_sysconfdir}/sane.d/dll.conf <<EOF
 net
 EOF
 %endif
-
-# Remove /usr/lib/libsane.a, it is a broken symlink
-#rm -f %{buildroot}%{_libdir}/libsane.a
 
 # Move documentation from /usr/doc to /usr/share/doc
 install -d %{buildroot}%{_docdir}/sane-backends-%version/
@@ -518,9 +511,9 @@ sed -i '/^%dir/d' sane-backends.lang
 sed -i '/^%dir/d' iscan.lang
 %endif
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
+# remove libtool archives
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
 %post -n saned
 %_post_service saned
 
@@ -533,17 +526,10 @@ sed -i '/^%dir/d' iscan.lang
 %preun -n saned
 %_preun_service saned
 
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
 %postun -n saned
 %_postun_userdel saned
 
-%clean
-rm -rf %{buildroot}
-
 %files backends -f sane-backends.lang
-%defattr(-,root,root,755)
 %doc %{_docdir}/sane-backends-%version
 %{_bindir}/sane-find-scanner
 %{_bindir}/scanimage
@@ -568,7 +554,6 @@ rm -rf %{buildroot}
 
 %if %epkowa_support
 %files backends-iscan -f iscan.lang
-%defattr(-,root,root,755)
 %_libdir/sane/libsane-epkowa.*
 %_sysconfdir/sane.d/epkowa.conf
 %_mandir/man5/sane-epkowa.5*
@@ -577,11 +562,9 @@ rm -rf %{buildroot}
 %endif
 
 %files backends-doc
-%defattr(-,root,root,755)
 %doc %{_docdir}/sane-backends-doc-%version
 
 %files -n %{libname}
-%defattr(-,root,root,755)
 %{_libdir}/*.so.*
 %dir %{_libdir}/sane
 %{_libdir}/sane/*.so.*
@@ -589,14 +572,9 @@ rm -rf %{buildroot}
 %exclude %_libdir/sane/libsane-epkowa.*
 %endif
 
-%files -n %{libname_devel}
-%defattr(-,root,root,755)
+%files -n %{develname}
 %{_bindir}/sane-config
-#%{_libdir}/*.a
-%{_libdir}/*.la
 %{_libdir}/*.so
-#%{_libdir}/sane/*.a
-%{_libdir}/sane/*.la
 %{_libdir}/sane/*.so
 %{_includedir}/sane
 %if %epkowa_support
@@ -604,7 +582,6 @@ rm -rf %{buildroot}
 %endif
 
 %files -n saned
-%defattr(-,root,root,755)
 %{_sbindir}/*
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
