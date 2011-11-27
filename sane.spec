@@ -1,3 +1,4 @@
+%define beta	%nil
 %define libmajor 1
 %define libname %mklibname %{name} %{libmajor}
 %define	develname %mklibname %{name} %{libmajor} -d
