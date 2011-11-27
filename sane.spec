@@ -376,7 +376,7 @@ rm -f backend/dll.conf
 
 %build
 %configure2_5x \
-	--disble-static \
+	--disable-static \
 	--enable-rpath=no \
 %if !%{gphoto2_support}
 	--without-gphoto2
@@ -395,7 +395,7 @@ PATH=`pwd`/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 #CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include/sane -L`pwd`/../backend/.libs/"\
 %configure2_5x \
-	--disble-static
+	--disable-static
 
 %make
 %make primax_scan
@@ -412,7 +412,7 @@ sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 %configure2_5x \
-	--disble-static \
+	--disable-static \
 	--disable-frontend
 %make
 cd ..
