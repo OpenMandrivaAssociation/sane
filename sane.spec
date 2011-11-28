@@ -503,9 +503,9 @@ install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 
 %find_lang sane-backends
-%if %epkowa_support
-%find_lang iscan
-%endif
+#if %epkowa_support
+#find_lang iscan
+#endif
 
 sed -i '/^%dir/d' sane-backends.lang
 %if %epkowa_support
