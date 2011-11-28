@@ -508,9 +508,9 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d
 #endif
 
 sed -i '/^%dir/d' sane-backends.lang
-%if %epkowa_support
-sed -i '/^%dir/d' iscan.lang
-%endif
+#if %epkowa_support
+#sed -i '/^%dir/d' iscan.lang
+#endif
 
 # remove libtool archives
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
@@ -554,7 +554,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %if %epkowa_support
-%files backends-iscan -f iscan.lang
+#-f iscan.lang
+%files backends-iscan 
 %_libdir/sane/libsane-epkowa.*
 %_sysconfdir/sane.d/epkowa.conf
 %_mandir/man5/sane-epkowa.5*
