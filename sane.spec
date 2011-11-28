@@ -503,14 +503,7 @@ install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 
 %find_lang sane-backends
-#if %epkowa_support
-#find_lang iscan
-#endif
-
 sed -i '/^%dir/d' sane-backends.lang
-#if %epkowa_support
-#sed -i '/^%dir/d' iscan.lang
-#endif
 
 # remove libtool archives
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
@@ -554,7 +547,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %if %epkowa_support
-#-f iscan.lang
 %files backends-iscan 
 %_libdir/sane/libsane-epkowa.*
 %_sysconfdir/sane.d/epkowa.conf
