@@ -324,7 +324,7 @@ access image acquisition devices available on the local host.
 # Patch for the HP ScanJet 44x0C scanners ("hp_rts88xx" backend)
 #%setup -q -T -D -a 9 -n sane-backends-%{version}%{beta}
 #cd sane_hp_rts88xx/sane_hp_rts88xx
-#./patch-sane.sh $RPM_BUILD_DIR/sane-backends-%{version}%{beta}
+#./patch-sane.sh %{_builddir}/sane-backends-%{version}%{beta}
 #cd ../..
 #patch21 -p1 -b .hp_rts88xx-0.18-fix_link
 #echo 'hp_rts88xx' >> backend/dll.conf.in
