@@ -110,7 +110,7 @@ BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(libusb)
 BuildRequires:	libieee1284-devel
-BuildRequires:	libltdl-devel
+BuildRequires:	libtool-devel
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-dvips
 BuildRequires:	texlive
@@ -511,9 +511,6 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d
 %find_lang sane-backends
 
 sed -i '/^%dir/d' sane-backends.lang
-
-# remove libtool archives
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %post -n saned
 %_post_service saned
