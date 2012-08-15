@@ -1,13 +1,18 @@
 %define beta	%nil
 %define libmajor 1
 %define libname %mklibname %{name} %{libmajor}
-%define	develname %mklibname %{name} %{libmajor} -d
+%define develname %mklibname %{name} %{libmajor} -d
 
 %define iscanversion 2.24.0
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
+%if %{_use_internal_dependency_generator}
+%define __noautoprovfiles %{_libdir}/sane
+%else
 %define _exclude_files_from_autoprov  %{_libdir}/%{name}/
+%endif
+
 %define __libtoolize /bin/true
 
 # Setting this makes the /etc/sane.d/dll.conf empty so that scanning apps
@@ -31,7 +36,7 @@
 
 Name:		sane
 Version:	1.0.22
-Release:	5
+Release:	6
 Summary:	SANE - local and remote scanner access
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
@@ -51,6 +56,7 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # mkdir x; cd x; tar -xvzf ../iscan_2.21.0-6.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.21.0-6-free.tar.bz2 *; cd ..; rm -rf x
 Source13:	iscan_%{iscanversion}-4-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
+Source15:	sane.rpmlintrc
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch9: 	sane-sparc.patch
 #Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
@@ -102,16 +108,17 @@ Requires:	sane-backends = %{version}-%{release}
 
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
-BuildRequires:	libusb-devel
+BuildRequires:	pkgconfig(libusb)
 BuildRequires:	libieee1284-devel
 BuildRequires:	libltdl-devel
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-dvips
+BuildRequires:	texlive
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
-BuildRequires:	libgtk+2.0-devel
+BuildRequires:	pkgconfig(gtk+-2.0)
 %if %{gphoto2_support}
-BuildRequires:	gphoto2-devel
+BuildRequires:	pkgconfig(libgphoto2)
 %endif
 %if %{v4l_support}
 BuildRequires:	libv4l-devel
@@ -121,7 +128,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %endif
 # ensure resmgr is not pulled
-BuildConflicts: resmgr-devel
+BuildConflicts:	resmgr-devel
 
 %description
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -164,7 +171,6 @@ Summary: 	SANE - local and remote scanner access
 Requires: 	%{libname} = %{version}
 Provides: 	libsane-devel = %{version}-%{release}
 Provides:	sane-devel = %{version}-%{release}
-Obsoletes: 	sane-devel
 
 %description -n %{develname}
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -503,6 +509,7 @@ install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 
 %find_lang sane-backends
+
 sed -i '/^%dir/d' sane-backends.lang
 
 # remove libtool archives
@@ -535,22 +542,22 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_mandir}/man5/*
 %{_mandir}/man7/*
 %dir %{_sysconfdir}/sane.d
-%dir %{_sysconfdir}/sane.d/dll.d
 #config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
 %{_sysconfdir}/udev/rules.d/*-libsane.rules
 %attr(1777,root,root) %dir /var/lib/lock/sane
 %if %epkowa_support
 # iscan files
-%exclude %_sysconfdir/sane.d/epkowa.conf
-%exclude %_mandir/man5/sane-epkowa.5*
+%exclude %{_sysconfdir}/sane.d/epkowa.conf
+%exclude %{_mandir}/man5/sane-epkowa.5*
 %endif
 
 %if %epkowa_support
+#-f iscan.lang
 %files backends-iscan 
-%_libdir/sane/libsane-epkowa.*
-%_sysconfdir/sane.d/epkowa.conf
-%_mandir/man5/sane-epkowa.5*
+%{_libdir}/sane/libsane-epkowa.*
+%{_sysconfdir}/sane.d/epkowa.conf
+%{_mandir}/man5/sane-epkowa.5*
 %dir %{_datadir}/iscan
 %{_datadir}/iscan/*
 %endif
@@ -580,4 +587,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/xinetd.d/saned
+
 
