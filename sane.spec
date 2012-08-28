@@ -35,8 +35,8 @@
 %endif
 
 Name:		sane
-Version:	1.0.22
-Release:	6
+Version:	1.0.23
+Release:	1
 Summary:	SANE - local and remote scanner access
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
@@ -72,7 +72,6 @@ Patch29:	sane-backends-1.0.22-primascan.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch30:	sane-backends-1.0.20-brother2list.patch
 Patch31:	sane-backends-1.0.22-strformat.patch
-Patch32:	add-mp495.patch
 # Debian patches
 # new build system breaks build when using pthreads.
 Patch101:       01_missing_pthreads.dpatch
@@ -91,17 +90,12 @@ Patch109:       09_po_update_es_add_gl.dpatch
 # /etc/sane.d/dll.d/ directory. This is a facility for packages providing
 # external backends (like libsane-extras, hpoj and hplip).
 Patch113:       22_dll_backend_conf.dpatch
-# do not install OS-specific READMEs.
-Patch114:       23_unneeded_doc.dpatch
 Patch115:       24_sane-desc.c_debian_mods.dpatch
-# use ubuntu udev rules 
-Patch118:	ubuntu_udev_noperm.dpatch
 
 # Fedora patches
 Patch202: sane-backends-1.0.20-open-macro.patch
 Patch203: sane-backends-1.0.20-hal.patch
 Patch205: sane-backends-1.0.20-epson-expression800.patch
-Patch206: sane-backends-1.0.22-v4l.patch
 
 Requires:	%{libname} = %{version}-%{release}
 Requires:	sane-backends = %{version}-%{release}
@@ -286,27 +280,23 @@ access image acquisition devices available on the local host.
 %prep
 %setup -q -n sane-backends-%{version}%{beta}
 %patch1 -p1 -b .plusteks12
-%patch24 -p0 -b .link
+#patch24 -p0 -b .link
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
-%patch32 -p0 -b .mp495
 
 %patch101 -p1
 #patch102 -p1
-%patch103 -p1
+##patch103 -p1
 %patch106 -p1
 #%patch109 -p1
 %patch113 -p1
-%patch114 -p1
 %patch115 -p1
-%patch118 -p1 -b .ubuntu-udev
 
 # Fedora patches
 %patch202 -p1 -b .open-macro
 #%patch203 -p1 -b .hal
 %patch205 -p0 -b .epson-expression800
-%patch206 -p1 -b .v4l
 
 
 # Patches for non-x86 platforms
@@ -342,7 +332,7 @@ access image acquisition devices available on the local host.
 
 # "primascan" backend 
 # (commented out in dll.conf, as it claims to support every USB scanner)
-%patch29 -p0 -b .primascan
+%patch29 -p1 -b .primascan
 cat %{SOURCE11} > backend/primascan.h
 cat %{SOURCE12} > backend/primascan.c
 ##perl -p -i -e 's:(BACKENDS=\"):$1primascan :' configure.in
@@ -574,6 +564,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_bindir}/sane-config
 %{_libdir}/*.so
 %{_libdir}/sane/*.so
+%_libdir/pkgconfig/*.pc
 %{_includedir}/sane
 %if %epkowa_support
 %exclude %_libdir/sane/libsane-epkowa*
