@@ -1,0 +1,48 @@
+#!/bin/sh -e
+## 03_dll.conf_debian.dpatch by Julien BLACHE <jblache@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: dll.conf comments for Debian
+## DP: Patch to the dll backend to look for pieces of dll.conf inside the
+## DP: /etc/sane.d/dll.d/ directory. This is a facility for packages providing
+## DP: external backends (like libsane-extras, hpoj and hplip).
+
+if [ $# -ne 1 ]; then
+    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+    exit 1
+fi
+
+[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+
+case "$1" in
+       -patch) patch $patch_opts -p1 < $0;;
+       -unpatch) patch $patch_opts -p1 -R < $0;;
+        *)
+                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+                exit 1;;
+esac
+
+exit 0
+
+--- sane-backends-1.0.21/backend/dll.conf.in~	2010-05-02 23:43:00.000000000 +0200
++++ sane-backends-1.0.21/backend/dll.conf.in	2010-05-02 23:43:46.000000000 +0200
+@@ -1,3 +1,10 @@
++# /etc/sane.d/dll.conf - Configuration file for the SANE dynamic backend loader
++#
++# Backends can also be enabled by configuration snippets under
++# /etc/sane.d/dll.d directory -- packages providing backends should drop
++# a config file similar to dll.conf in this directory, named after the package.
++#
++
+ # enable the next line if you want to allow access through the network:
+ net
+ abaton
+@@ -54,7 +61,6 @@
+ niash
+ #p5
+ pie
+-pint
+ pixma
+ plustek
+ #plustek_pp

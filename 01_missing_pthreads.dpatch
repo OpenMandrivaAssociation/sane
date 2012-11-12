@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_missing_pthreads.dpatch by  <jblache@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: New build system breaks build when enabling pthreads (--disable-fork-process).
+
+@DPATCH@
+diff -urNad sane-backends-1.0.20~/backend/Makefile.in sane-backends-1.0.20/backend/Makefile.in
+--- sane-backends-1.0.20~/backend/Makefile.in	2009-04-30 15:41:18.000000000 +0200
++++ sane-backends-1.0.20/backend/Makefile.in	2009-05-04 11:19:21.724357246 +0200
+@@ -1686,7 +1686,7 @@
+ lib_LTLIBRARIES = libsane.la
+ sanelibdir = $(libdir)/sane
+ sanelib_LTLIBRARIES = $(BACKEND_LIBS_ENABLED) libsane-dll.la
+-COMMON_LIBS = ../lib/liblib.la
++COMMON_LIBS = ../lib/liblib.la $(PTHREAD_LIBS)
+ 
+ # Each backend should define a convenience library that compiles
+ # all related files within backend directory.  General guideline

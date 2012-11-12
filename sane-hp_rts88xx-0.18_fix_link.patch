@@ -1,0 +1,11 @@
+diff -p -up sane-backends-1.0.19/backend/Makefile.in~ sane-backends-1.0.19/backend/Makefile.in
+--- sane-backends-1.0.19/backend/Makefile.in~	2008-05-23 08:42:16.000000000 -0400
++++ sane-backends-1.0.19/backend/Makefile.in	2008-05-23 09:44:58.000000000 -0400
+@@ -361,6 +361,7 @@ libsane-abaton.la: ../sanei/sanei_scsi.l
+ libsane-hp_rts88xx.la: ../sanei/sanei_config2.lo 
+ libsane-hp_rts88xx.la: ../sanei/sanei_constrain_value.lo 
+ libsane-hp_rts88xx.la: ../sanei/sanei_usb.lo
++libsane-hp_rts88xx.la: ../sanei/sanei_scsi.lo
+ libsane-agfafocus.la: ../sanei/sanei_config2.lo
+ libsane-agfafocus.la: ../sanei/sanei_constrain_value.lo
+ libsane-agfafocus.la: ../sanei/sanei_scsi.lo

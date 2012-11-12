@@ -1,0 +1,32 @@
+diff -p -up sane-backends-1.0.20/backend/rts8891.c.strformat sane-backends-1.0.20/backend/rts8891.c
+--- sane-backends-1.0.20/backend/rts8891.c.strformat	2009-04-30 15:15:20.000000000 +0200
++++ sane-backends-1.0.20/backend/rts8891.c	2009-09-28 14:00:28.000000000 +0200
+@@ -3751,7 +3751,7 @@ init_device (struct Rts8891_Device *dev)
+       for (i = 0; i < dev->reg_count; i++)
+ 	sprintf (message + strlen (message), "0x%02x ", dev->regs[i]);
+       sprintf (message + strlen (message), "\n");
+-      DBG (DBG_io2, message);
++      DBG (DBG_io2, "%s", message);
+     }
+ 
+   /* initial sensor guess */
+--- sane-backends-1.0.22/frontend/scanimage.c.str	2011-04-01 10:42:12.000000000 +0200
++++ sane-backends-1.0.22/frontend/scanimage.c	2011-04-01 10:42:36.000000000 +0200
+@@ -1891,7 +1891,7 @@
+ 				printf (start, int_arg);
+ 				break;
+ 			      case 0:
+-				printf (start);
++				printf ("%s", start);
+ 				break;
+ 			      }
+ 			    *percent = cc;
+@@ -1905,7 +1905,7 @@
+ 			  }
+ 		      }
+ 		    if (*start)
+-		      printf (start);
++		      printf ("%s",start);
+ 		  }
+ 	      }
+ 	    if (i == 0 && ch != 'f')
