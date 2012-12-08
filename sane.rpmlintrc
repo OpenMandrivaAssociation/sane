@@ -1,0 +1,2 @@
+# Actually, versioned enough
+addFilter("E: non-versioned-file-in-library-package")
