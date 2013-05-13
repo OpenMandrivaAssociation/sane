@@ -103,7 +103,7 @@ Requires:	sane-backends = %{version}-%{release}
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(libusb)
-BuildRequires:	libieee1284-devel
+BuildRequires:	ieee1284-devel
 BuildRequires:	libtool-devel
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-dvips
@@ -115,7 +115,7 @@ BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
 %if %{v4l_support}
-BuildRequires:	libv4l-devel
+BuildRequires:	pkgconfig(libv4l1)
 %endif
 %if %{epkowa_support}
 BuildRequires:	autoconf
