@@ -119,7 +119,7 @@ BuildRequires:	pkgconfig(libv4l1)
 %endif
 %if %{epkowa_support}
 BuildRequires:	autoconf
-BuildRequires:	automake
+BuildRequires:	automake1.7
 %endif
 # ensure resmgr is not pulled
 BuildConflicts:	resmgr-devel
