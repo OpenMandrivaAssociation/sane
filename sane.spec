@@ -1,9 +1,9 @@
-%define beta	%nil
-%define libmajor 1
-%define libname %mklibname %{name} %{libmajor}
-%define develname %mklibname %{name} %{libmajor} -d
-
 %define iscanversion 2.24.0
+%define beta	%nil
+%define major	1
+%define libname	%mklibname %{name} %{major}
+%define devname	%mklibname %{name} %{major} -d
+
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
@@ -34,16 +34,16 @@
 %define epkowa_support 0
 %endif
 
+Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.23
-Release:	3
-Summary:	SANE - local and remote scanner access
+Release:	4
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
-URL:		http://www.sane-project.org/
-Source0:	ftp://ftp.sane-project.org/pub/sane/sane-%version/sane-backends-%{version}%{beta}.tar.gz
+Url:		http://www.sane-project.org/
+Source0:	ftp://ftp.sane-project.org/pub/sane/sane-%{version}/sane-backends-%{version}%{beta}.tar.gz
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
@@ -58,11 +58,8 @@ Source13:	iscan_%{iscanversion}-4-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
 Source15:	sane.rpmlintrc
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
-Patch9: 	sane-sparc.patch
-#Patch20:	http://projects.troy.rollo.name/rt-scanners/hp3500.diff
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
-Patch24:	sane-backends-1.0.21-link.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
 Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
@@ -75,16 +72,10 @@ Patch31:	sane-backends-1.0.22-strformat.patch
 # Debian patches
 # new build system breaks build when using pthreads.
 Patch101:       01_missing_pthreads.dpatch
-# only link the frontends with the libraries they need.
-Patch102:       02_frontends_libs.dpatch
-# reduce libsane.so deps to the bare minimum.
-Patch103:       03_libsane_deps.dpatch
 # add back SANE_CAP_ALWAYS_SETTABLE which was mistakenly
 # removed from SANE 1.0.20
 Patch106:       06_cap_always_settable.dpatch
 # Update es translation and add new gl translation, courtesy of
-# Miguel Bouzada <mbouzada@gmail.com>.
-Patch109:       09_po_update_es_add_gl.dpatch
 # Use fedora's patch to remove rpath
 # Patch to the dll backend to look for pieces of dll.conf inside the
 # /etc/sane.d/dll.d/ directory. This is a facility for packages providing
@@ -93,24 +84,20 @@ Patch113:       22_dll_backend_conf.dpatch
 Patch115:       24_sane-desc.c_debian_mods.dpatch
 
 # Fedora patches
-Patch202: sane-backends-1.0.20-open-macro.patch
-Patch203: sane-backends-1.0.20-hal.patch
-Patch205: sane-backends-1.0.20-epson-expression800.patch
+Patch202:	sane-backends-1.0.20-open-macro.patch
+Patch205:	sane-backends-1.0.20-epson-expression800.patch
 
-Requires:	%{libname} = %{version}-%{release}
-Requires:	sane-backends = %{version}-%{release}
-
-BuildRequires:	jpeg-devel
-BuildRequires:	tiff-devel
-BuildRequires:	pkgconfig(libusb)
-BuildRequires:	ieee1284-devel
-BuildRequires:	libtool-devel
+BuildRequires:	gettext
 BuildRequires:	tetex-latex
 BuildRequires:	tetex-dvips
 BuildRequires:	texlive
-BuildRequires:	gettext
 BuildRequires:	gettext-devel
+BuildRequires:	ieee1284-devel
+BuildRequires:	libtool-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(libusb)
 %if %{gphoto2_support}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
@@ -118,7 +105,6 @@ BuildRequires:	pkgconfig(libgphoto2)
 BuildRequires:	pkgconfig(libv4l1)
 %endif
 %if %{epkowa_support}
-BuildRequires:	autoconf
 BuildRequires:	automake1.7
 %endif
 # ensure resmgr is not pulled
@@ -140,49 +126,26 @@ to enable it, install the saned package.
 
 %package -n %{libname}
 Group: 		System/Kernel and hardware
-License: 	LGPL
+License: 	LGPLv2
 Summary: 	SANE - local and remote scanner access. This package contains the sane library
-Provides:	libsane = %{version}-%{release}
 
 %description -n %{libname}
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
+This package contains the shared libraries for %{name}.
 
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
-This package does not enable network scanning by default; if you wish
-to enable it, install the saned package.
-
-%package -n %{develname}
+%package -n %{devname}
 Group: 		Development/C
 License:	LGPL
 Summary: 	SANE - local and remote scanner access
-Requires: 	%{libname} = %{version}
-Provides: 	libsane-devel = %{version}-%{release}
+Requires: 	%{libname} = %{version}-%{release}
 Provides:	sane-devel = %{version}-%{release}
 
-%description -n %{develname}
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
-
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
+%description -n %{devname}
 This package contains the headers and development libraries necessary 
 to develop applications using SANE.
 
 %package backends
 Group:		System/Kernel and hardware
-License:	LGPL
+License:	LGPLv2
 Summary:	SANE - local and remote scanner access
 Provides:	%{name} = %{version}-%{release}
 %if %epkowa_support
@@ -190,44 +153,16 @@ Suggests:	iscan
 %endif
 
 %description backends
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
-
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
-This package does not enable network scanning by default; if you wish
-to enable it, install the saned package and set up the sane-net backend.
 This package contains the backends for different scanners.
 
 %if %epkowa_support
 %package backends-iscan
 Group:		System/Kernel and hardware
-License:	LGPL
+License:	LGPLv2
 Summary:	SANE - local and remote scanner access
 Provides:	iscan = %{iscanversion}
-Conflicts:	sane-backends < 1.0.19-3
-Conflicts:	%{libname} < 1.0.19-5
-Conflicts:	%{develname} < 1.0.20-7
 
 %description backends-iscan
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
-
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
-This package does not enable network scanning by default; if you wish
-to enable it, install the saned package and set up the sane-net backend.
-
 This package contains the iscan backend, in order to not conflict with
 manufacturer-supplied packages.
 %endif
@@ -240,90 +175,35 @@ Group:		System/Kernel and hardware
 This package contains the SANE backend documentation for different
 scanners.
 
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
-
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
-This package does not enable network scanning by default; if you wish
-to enable it, install the saned package and set up the sane-net backend.
-
 %package -n saned
 Group:          System/Kernel and hardware
-License:        LGPL
+License:        LGPLv2
 Summary:        SANE - local and remote scanner access
 Provides:       %{name} = %{version}-%{release}
 Provides:	saned = %{version}-%{release}
-Requires:	sane-backends >= 1.0.15-2mdk
+Requires:	sane-backends >= %{version}-%{release}
 Requires:	xinetd
 Requires(preun,post):	rpm-helper
 
 %description -n saned
-SANE (Scanner Access Now Easy) is a sane and simple interface
-to both local and networked scanners and other image acquisition devices
-like digital still and video cameras.  SANE currently includes modules for
-accessing a range of scanners, including models from Agfa SnapScan, Apple,
-Artec, Canon, CoolScan, Epson, HP, Microtek, Mustek, Nikon, Siemens,
-Tamarack, UMAX, Connectix, QuickCams and other SANE devices via network.
-
-For the latest information on SANE, the SANE standard definition, and
-mailing list access, see http://www.mostang.com/sane/
-
 This package contains saned, a daemon that allows remote clients to
 access image acquisition devices available on the local host.
 
 %prep
-%setup -q -n sane-backends-%{version}%{beta}
+%setup -qn sane-backends-%{version}%{beta}
 %patch1 -p1 -b .plusteks12
-#patch24 -p0 -b .link
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
 %patch31 -p1 -b .strformat
 
 %patch101 -p1
-#patch102 -p1
-##patch103 -p1
 %patch106 -p1
-#%patch109 -p1
 %patch113 -p1
 %patch115 -p1
 
 # Fedora patches
 %patch202 -p1 -b .open-macro
-#%patch203 -p1 -b .hal
-%patch205 -p0 -b .epson-expression800
-
-
-# Patches for non-x86 platforms
-%ifarch sparc
-%patch9 -p1 -b .sparc
-%endif
-
-# "geniusvp2" backend
-#setup -q -T -D -a 14 -n sane-backends-%{version}
-
-# "hp3500" backend
-# Patch does not match on file unsupported.desc (change should not affect
-# the backend itself), so we force it in
-#bzcat %{PATCH20} | patch -p0 -b --suffix .hp3500 -f || :
-
-# Fix parallel build (Gwenole)
-#for a in `find . -name Makefile.in -print`; do \
-#	perl -p -i -e 's/^(\s*TARGETS\s+=\s+)(\S+)(\s+)(\$\(\S+_LTOBJS\))/$1$4$3$2/' $a; \
-#done
-
-# Patch for the HP ScanJet 44x0C scanners ("hp_rts88xx" backend)
-#%setup -q -T -D -a 9 -n sane-backends-%{version}%{beta}
-#cd sane_hp_rts88xx/sane_hp_rts88xx
-#./patch-sane.sh %{_builddir}/sane-backends-%{version}%{beta}
-#cd ../..
-#patch21 -p1 -b .hp_rts88xx-0.18-fix_link
-#echo 'hp_rts88xx' >> backend/dll.conf.in
+%patch205 -p1 -b .epson-expression800
 
 # Primax parallel port scanners
 %if %{primax_support}
@@ -342,9 +222,6 @@ cat %{SOURCE12} > backend/primascan.c
 echo '#primascan' >> backend/dll.conf.in
 autoreconf -fi
 
-# Scanners in some Brother MF devices
-#setup -q -T -D -a 10 -n sane-backends-%{version}%{beta}
-
 # Epson Avasys driver for Epson scanners
 %if %{epkowa_support}
 %setup -q -T -D -a 13 -n sane-backends-%{version}%{beta}
@@ -352,7 +229,7 @@ autoreconf -fi
 
 # lib64 fixes (avoid patch)
 # NOTE: don't regenerate configure script past this line
-perl -pi -e "s@/lib(\"|\b[^/])@/%_lib\1@g if /LDFLAGS=.*with_ptal/" configure
+perl -pi -e "s@/lib(\"|\b[^/])@/%{_lib}\1@g if /LDFLAGS=.*with_ptal/" configure
 
 # Reduce number of retries done by the "snapscan" backend when accessing
 # the scanner
@@ -378,9 +255,6 @@ rm -f backend/dll.conf
 	--without-gphoto2
 %endif
 
-
-# Do not use macros here (with percent in the beginning) as parallelized
-# build does not work
 %make
 
 # Primax parallel port scanners
@@ -389,7 +263,6 @@ chmod a+rx tools/sane-config
 cd primaxscan*
 PATH=`pwd`/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
-#CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include/sane -L`pwd`/../backend/.libs/"\
 %configure2_5x \
 	--disable-static
 
@@ -415,14 +288,11 @@ cd ..
 %endif
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 # Create missing lock dir
 install -d %{buildroot}/var/lib/lock/sane
 
-#mv %{buildroot}/%{_sbindir}/saned %{buildroot}/%{_sbindir}/in.saned
-#install -m 755 tools/sane-find-scanner %{buildroot}/%{_bindir}
 perl -pi -e "s/installed.*/installed=yes/g" %{buildroot}%{_libdir}/libsane.la
 /sbin/ldconfig -n %{buildroot}%{_libdir} %{buildroot}%{_libdir}/sane
 
@@ -456,14 +326,14 @@ EOF
 %endif
 
 # Move documentation from /usr/doc to /usr/share/doc
-install -d %{buildroot}%{_docdir}/sane-backends-%version/
-install -d %{buildroot}%{_docdir}/sane-backends-doc-%version/
+install -d %{buildroot}%{_docdir}/sane-backends-%{version}/
+install -d %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
 pushd %{buildroot}/usr/doc/sane-%{version}
 #pushd %{buildroot}/usr/doc/sane-1.0.18-cvs
-mv `find -mindepth 1 -type d` *.html *.txt %{buildroot}%{_docdir}/sane-backends-doc-%version/
-mv README README.linux %{buildroot}%{_docdir}/sane-backends-%version/
+mv `find -mindepth 1 -type d` *.html *.txt %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
+mv README README.linux %{buildroot}%{_docdir}/sane-backends-%{version}/
 rm -f README.*
-mv * %{buildroot}%{_docdir}/sane-backends-%version/
+mv * %{buildroot}%{_docdir}/sane-backends-%{version}/
 popd
 
 # Primax parallel port scanners
@@ -518,7 +388,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %_postun_userdel saned
 
 %files backends -f sane-backends.lang
-%doc %{_docdir}/sane-backends-%version
+%doc %{_docdir}/sane-backends-%{version}
 %{_bindir}/sane-find-scanner
 %{_bindir}/scanimage
 %{_bindir}/gamma4scanimage
@@ -550,24 +420,24 @@ sed -i '/^%dir/d' sane-backends.lang
 %endif
 
 %files backends-doc
-%doc %{_docdir}/sane-backends-doc-%version
+%doc %{_docdir}/sane-backends-doc-%{version}
 
 %files -n %{libname}
-%{_libdir}/*.so.*
+%{_libdir}/*.so.%{major}*
 %dir %{_libdir}/sane
 %{_libdir}/sane/*.so.*
 %if %epkowa_support
-%exclude %_libdir/sane/libsane-epkowa.*
+%exclude %{_libdir}/sane/libsane-epkowa.*
 %endif
 
-%files -n %{develname}
+%files -n %{devname}
 %{_bindir}/sane-config
 %{_libdir}/*.so
 %{_libdir}/sane/*.so
-%_libdir/pkgconfig/*.pc
+%{_libdir}/pkgconfig/*.pc
 %{_includedir}/sane
 %if %epkowa_support
-%exclude %_libdir/sane/libsane-epkowa*
+%exclude %{_libdir}/sane/libsane-epkowa*
 %endif
 
 %files -n saned
