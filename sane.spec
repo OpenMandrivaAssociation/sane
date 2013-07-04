@@ -88,9 +88,6 @@ Patch202:	sane-backends-1.0.20-open-macro.patch
 Patch205:	sane-backends-1.0.20-epson-expression800.patch
 
 BuildRequires:	gettext
-BuildRequires:	tetex-latex
-BuildRequires:	tetex-dvips
-BuildRequires:	texlive
 BuildRequires:	gettext-devel
 BuildRequires:	ieee1284-devel
 BuildRequires:	libtool-devel
@@ -103,9 +100,6 @@ BuildRequires:	pkgconfig(libgphoto2)
 %endif
 %if %{v4l_support}
 BuildRequires:	pkgconfig(libv4l1)
-%endif
-%if %{epkowa_support}
-BuildRequires:	automake1.7
 %endif
 # ensure resmgr is not pulled
 BuildConflicts:	resmgr-devel
@@ -261,6 +255,7 @@ rm -f backend/dll.conf
 %if %{primax_support}
 chmod a+rx tools/sane-config
 cd primaxscan*
+autoreconf -fi
 PATH=`pwd`/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 %configure2_5x \
@@ -276,7 +271,6 @@ cd ..
 chmod a+rx tools/sane-config
 PATH=`pwd`/tools:${PATH}
 cd iscan-%{iscanversion}
-#autoconf
 sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
