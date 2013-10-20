@@ -36,14 +36,14 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.0.23
-Release:	4
+Version:	1.0.24
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
 Url:		http://www.sane-project.org/
-Source0:	ftp://ftp.sane-project.org/pub/sane/sane-%{version}/sane-backends-%{version}%{beta}.tar.gz
+Source0:	https://alioth.debian.org/frs/download.php/file/3958/sane-backends-%{version}.tar.gz
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source5:	saned-xinetd
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
