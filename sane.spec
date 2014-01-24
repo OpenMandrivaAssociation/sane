@@ -37,7 +37,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.24
-Release:	5
+Release:	6
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -94,7 +94,9 @@ BuildRequires:	libtool-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(libusb)
+BuildRequires:	pkgconfig(libusb-1.0)
+BuildRequires:	pkgconfig(avahi-client)
+BuildRequires:	avahi-common-devel
 %if %{gphoto2_support}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
@@ -242,9 +244,11 @@ popd
 rm -f backend/dll.conf
 
 %build
-%configure2_5x \
+CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure2_5x \
 	--disable-static \
 	--enable-rpath=no \
+	--enable-avahi \
+	--enable-libusb_1_0 \
 %if !%{gphoto2_support}
 	--without-gphoto2
 %endif
@@ -272,8 +276,8 @@ chmod a+rx tools/sane-config
 PATH=`pwd`/tools:${PATH}
 cd iscan-%{iscanversion}
 sh ./bootstrap
-export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
-export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
+export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
+export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 %configure2_5x \
 	--disable-static \
 	--disable-frontend

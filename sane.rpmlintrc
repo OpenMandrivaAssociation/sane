@@ -1,2 +1,4 @@
 # Actually, versioned enough
 addFilter("E: non-versioned-file-in-library-package")
+# *.so files are loadable drivers, not devel files
+addFilter("E: devel-file-in-non-devel-package")
