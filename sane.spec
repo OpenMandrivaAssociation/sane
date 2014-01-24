@@ -94,6 +94,7 @@ BuildRequires:	libtool-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(libusb)
 BuildRequires:	pkgconfig(libusb-1.0)
 BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
