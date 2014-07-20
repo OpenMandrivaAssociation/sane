@@ -29,10 +29,10 @@
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
 %define epkowa_support 1
-%ifarch alpha ppc sparc %arm %mips
-%define primax_support 0
-%define epkowa_support 0
-%endif
+#ifarch alpha ppc sparc %arm %mips
+#define primax_support 0
+#define epkowa_support 0
+#endif
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
