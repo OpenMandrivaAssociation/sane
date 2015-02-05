@@ -37,7 +37,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.24
-Release:	11
+Release:	12
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -57,6 +57,8 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 Source13:	iscan_%{iscanversion}-4-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
 Source15:	sane.rpmlintrc
+Source16:	saned.socket
+Source17:	saned.service
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
 Patch23:	iscan-2.10.0-1_fix_link.patch
@@ -86,6 +88,9 @@ Patch115:       24_sane-desc.c_debian_mods.dpatch
 # Fedora patches
 Patch202:	sane-backends-1.0.20-open-macro.patch
 Patch205:	sane-backends-1.0.20-epson-expression800.patch
+
+Patch206:	xsane-fix-segfault-avahi-fix-kodakio.patch
+Patch207:	xsane-network.patch
 
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
@@ -201,6 +206,8 @@ access image acquisition devices available on the local host.
 # Fedora patches
 %patch202 -p1 -b .open-macro
 %patch205 -p1 -b .epson-expression800
+%patch206 -p1
+%patch207 -p1
 
 # Primax parallel port scanners
 %if %{primax_support}
@@ -252,7 +259,7 @@ if echo %__cc |grep -q clang; then
 fi
 
 %build
-CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure2_5x \
+CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure \
 	--disable-static \
 	--enable-rpath=no \
 	--enable-avahi \
@@ -286,7 +293,7 @@ cd iscan-%{iscanversion}
 sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
-%configure2_5x \
+%configure \
 	--disable-static \
 	--disable-frontend
 %make
@@ -374,24 +381,20 @@ install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/
 # Shorten too long comments
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
 
+# (tpg) install services
+mkdir -p %{buildroot}%{_unitdir}
+install -m 644 %{SOURCE16} %{buildroot}%{_unitdir}/saned.socket
+install -m 644 %{SOURCE17} %{buildroot}%{_unitdir}/saned@.service
+
 %find_lang sane-backends
 
 sed -i '/^%dir/d' sane-backends.lang
-
-%post -n saned
-%_post_service saned
 
 %pre -n saned
 # Add saned to group cdwriter and ub for scanner access.
 #/usr/sbin/useradd -r -M -s /bin/false  -c "system user for saned" saned -G cdwriter,usb || :
 %_pre_useradd saned /etc/sane.d /bin/false
 /usr/sbin/usermod -G cdwriter,usb saned
-
-%preun -n saned
-%_preun_service saned
-
-%postun -n saned
-%_postun_userdel saned
 
 %files backends -f sane-backends.lang
 %doc %{_docdir}/sane-backends-%{version}
@@ -451,5 +454,3 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/xinetd.d/saned
-
-
