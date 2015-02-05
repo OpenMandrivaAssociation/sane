@@ -420,7 +420,7 @@ sed -i '/^%dir/d' sane-backends.lang
 
 %if %epkowa_support
 #-f iscan.lang
-%files backends-iscan 
+%files backends-iscan
 %{_libdir}/sane/libsane-epkowa.*
 %{_sysconfdir}/sane.d/epkowa.conf
 %{_mandir}/man5/sane-epkowa.5*
@@ -454,3 +454,4 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/xinetd.d/saned
+%{_unitdir}/saned*.s*
