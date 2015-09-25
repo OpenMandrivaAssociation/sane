@@ -409,8 +409,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_libdir}/sane/libsane-epkowa.*
 %{_sysconfdir}/sane.d/epkowa.conf
 %{_mandir}/man5/sane-epkowa.5*
-%dir %{_datadir}/iscan
-%{_datadir}/iscan/*
+%{_mandir}/man8/iscan-registry.*
 %endif
 
 %files backends-doc
