@@ -1,4 +1,4 @@
-%define iscanversion 2.24.0
+%define iscanversion 2.31.0
 %define beta	%nil
 %define major	1
 %define libname	%mklibname %{name} %{major}
@@ -53,8 +53,8 @@ Source12:	http://www.geocities.com/trsh0101/SANE/primascan.c
 # The free part of Epson's scanner driver package IScan, full package
 # downloaded from http://www.avasys.jp/english/linux_e/index.html
 # Non-free part stripped out with
-# mkdir x; cd x; tar -xvzf ../iscan_2.21.0-6.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.21.0-6-free.tar.bz2 *; cd ..; rm -rf x
-Source13:	iscan_%{iscanversion}-4-free.tar.bz2
+# mkdir x; cd x; tar -xvzf ../iscan_2.31.0-1.tar.gz; rm -f */non-free/EAPL*.txt */non-free/lib*.so; tar -cvjf ../iscan_2.31.0-1-free.tar.bz2 *; cd ..; rm -rf x
+Source13:	iscan_%{iscanversion}-1-free.tar.bz2
 Source14:	http://downloads.sourceforge.net/project/geniusvp2/sane-backend-geniusvp2/1.0.16.1/sane-backend-geniusvp2_1.0.16.1.tar.gz
 Source15:	sane.rpmlintrc
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
