@@ -1,4 +1,4 @@
-%define iscanversion 2.31.0
+%define iscanversion 2.30.1
 %define beta	%nil
 %define major	1
 %define libname	%mklibname %{name} %{major}
@@ -231,9 +231,9 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 
 %if %epkowa_support
 pushd iscan-%{iscanversion}
-%patch23 -p0 -b .iscan-2.10.0-1_fix_link
+#patch23 -p0 -b .iscan-2.10.0-1_fix_link
 %patch26 -p0 -b .no_non-free_please
-%patch27 -p2 -b .linkage_fix
+#patch27 -p2 -b .linkage_fix
 popd
 %endif
 
