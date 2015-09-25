@@ -37,7 +37,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.24
-Release:	2.1
+Release:	2.2
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -366,17 +366,11 @@ perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d
 
 sed -i '/^%dir/d' sane-backends.lang
 
-%post -n saned
-%_post_service saned
-
 %pre -n saned
 # Add saned to group cdwriter and ub for scanner access.
 #/usr/sbin/useradd -r -M -s /bin/false  -c "system user for saned" saned -G cdwriter,usb || :
 %_pre_useradd saned /etc/sane.d /bin/false
 /usr/sbin/usermod -G cdwriter,usb saned
-
-%preun -n saned
-%_preun_service saned
 
 %postun -n saned
 %_postun_userdel saned
