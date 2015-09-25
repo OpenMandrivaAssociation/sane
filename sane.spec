@@ -1,4 +1,4 @@
-%define iscanversion 2.31.0
+%define iscanversion 2.30.1
 %define beta	%nil
 %define major	1
 %define libname	%mklibname %{name} %{major}
@@ -61,9 +61,7 @@ Source16:	saned.socket
 Source17:	saned.service
 Patch1:		sane-backends-1.0.18-plustek-s12.patch
 Patch21:	sane-hp_rts88xx-0.18_fix_link.patch
-Patch23:	iscan-2.10.0-1_fix_link.patch
 Patch26:	iscan-2.20.1-no_non-free_please.diff
-Patch27:	iscan-2.20.1-linkage_fix.patch
 # (fc) 1.0.19-12mdv fix group for device
 Patch28:	sane-backends-1.0.20-group.patch
 # (fc) 1.0.20-1mdv primascan build support
@@ -241,10 +239,7 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 
 %if %epkowa_support
 pushd iscan-%{iscanversion}
-%patch23 -p0 -b .iscan-2.10.0-1_fix_link
 %patch26 -p0 -b .no_non-free_please
-%patch27 -p2 -b .linkage_fix
-sed -i -e 's,\[usb\],usb-1.0,g;s,usb_get_busses,libusb_open,g' configure.ac
 popd
 %endif
 
