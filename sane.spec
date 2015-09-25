@@ -4,6 +4,8 @@
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname %{name} %{major} -d
 
+%define _disable_lto 1
+%define _disable_rebuild_configure 1
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
@@ -285,7 +287,7 @@ cd ..
 chmod a+rx tools/sane-config
 PATH=`pwd`/tools:${PATH}
 cd iscan-%{iscanversion}
-sh ./bootstrap
+#sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 %configure \
