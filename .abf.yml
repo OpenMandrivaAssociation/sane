@@ -1,12 +1,7 @@
 removed_sources:
   sane-backends-1.0.23.tar.gz: 62fc65736879f0bdb2fda20a31ee10d1ed335ae7
 sources:
-<<<<<<< HEAD
-  iscan_2.24.0-4-free.tar.bz2: 8228edc1cfaa75fd0cfba631746376bf1f166f53
-=======
   iscan_2.30.1-1-free.tar.bz2: 15ab9a308ac88d0e6f947b4e59e6646429004d29
->>>>>>> d6f9649... Correction
-  iscan_2.31.0-1-free.tar.bz2: 763d0fcc832bed83f38b9ef17e4771874c180c38
   primaxscan-1.1.beta1.tar.bz2: 66fa1b44258916ea8d437c4a3636a78fc657b139
   sane-backend-geniusvp2_1.0.16.1.tar.gz: 4af825c231c8c048f8145af26b8fda3b66cb8be8
   sane-backends-1.0.24.tar.gz: c10bcb30a1b092b2c2fe5a86d6a5efc29123ccf9
