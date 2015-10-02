@@ -150,7 +150,7 @@ License:	LGPLv2
 Summary:	SANE - local and remote scanner access
 Provides:	%{name} = %{version}-%{release}
 %if %epkowa_support
-Suggests:	%{name}-backends-iscan = %{EVRD}
+Suggests:	iscan
 %endif
 
 %description backends
