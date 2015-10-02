@@ -39,7 +39,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.24
-Release:	15
+Release:	16
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -47,7 +47,6 @@ Group:		Graphics
 Url:		http://www.sane-project.org/
 Source0:	https://alioth.debian.org/frs/download.php/file/3958/sane-backends-%{version}.tar.gz
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
-Source5:	saned-xinetd
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
 Source11:	http://www.geocities.com/trsh0101/SANE/primascan.h
@@ -151,7 +150,7 @@ License:	LGPLv2
 Summary:	SANE - local and remote scanner access
 Provides:	%{name} = %{version}-%{release}
 %if %epkowa_support
-Suggests:	iscan
+Suggests:	%{name}-backends-iscan = %{EVRD}
 %endif
 
 %description backends
@@ -184,7 +183,6 @@ Summary:        SANE - local and remote scanner access
 Provides:       %{name} = %{version}-%{release}
 Provides:	saned = %{version}-%{release}
 Requires:	sane-backends >= %{version}-%{release}
-Requires:	xinetd
 Requires(preun,post):	rpm-helper
 
 %description -n saned
@@ -368,10 +366,6 @@ echo 'epkowa' >> %{buildroot}%{_sysconfdir}/sane.d/dll.conf
 cd ..
 %endif
 
-# Xinetd.d entry
-mkdir %{buildroot}/etc/xinetd.d
-cat %{SOURCE5} > %{buildroot}/etc/xinetd.d/saned
-
 # udev rules for libusb user support
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
 install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
@@ -449,5 +443,4 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_sbindir}/*
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
-%attr(644,root,root) %config(noreplace) %{_sysconfdir}/xinetd.d/saned
 %{_unitdir}/saned*.s*
