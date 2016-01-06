@@ -84,8 +84,7 @@ Patch13:	24_sane-desc.c_debian_mods.dpatch
 # Fedora patches
 Patch20:	sane-backends-1.0.20-open-macro.patch
 Patch21:	sane-backends-1.0.23-udev.patch
-Patch22:	xsane-fix-segfault-avahi-fix-kodakio.patch
-Patch23:	xsane-network.patch
+Patch22:	xsane-network.patch
 
 Patch30:	iscan-2.29.3-fix-link.patch
 Patch31:	iscan-2.20.1-no_non-free_please.diff
@@ -207,7 +206,6 @@ access image acquisition devices available on the local host.
 %patch20 -p1 -b .open-macro
 %patch21 -p1 -b .udev
 %patch22 -p1
-%patch23 -p1
 
 # Primax parallel port scanners
 %if %{with primax}
@@ -267,6 +265,13 @@ CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure \
 
 %make
 
+# Write udev/hwdb files
+_topdir="$PWD"
+pushd tools
+./sane-desc -m udev+hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.rules
+./sane-desc -m hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.hwdb
+
+
 # Primax parallel port scanners
 %if %{primax_support}
 chmod a+rx tools/sane-config
@@ -290,6 +295,7 @@ cd iscan-%{iscanversion}
 #sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
+export LDFLAGS="%{?ldflags} -lusb-1.0"
 %configure \
 	--disable-static \
 	--disable-frontend
@@ -310,11 +316,6 @@ perl -pi -e "s/installed.*/installed=yes/g" %{buildroot}%{_libdir}/libsane.la
 # /etc/sane.d/dll.conf as it makes SANE hanging on some systems when
 # the appropriate scanner is not present
 perl -p -i -e 's/^(\s*geniusvp2)/\#$1/g' %{buildroot}%{_sysconfdir}/sane.d/dll.conf
-
-# Comment out entry for the "epson" backend in /etc/sane.d/dll.conf as
-# we have also Epson's "epkowa" backend which supports the same
-# scanners
-perl -p -i -e 's/^(\s*epson)/\#$1/g' %{buildroot}%{_sysconfdir}/sane.d/dll.conf
 
 # Remove "hpoj" line from /etc/sane.d/dll.con
 perl -p -i -e 's/HP\s+OfficeJet/HPLIP/g' %{buildroot}%{_sysconfdir}/sane.d/dll.conf
@@ -370,9 +371,10 @@ cd ..
 
 # udev rules for libusb user support
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
-install -m644 tools/udev/libsane.rules %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
+install -m 0644 tools/udev/sane-backends.rules %{buildroot}%{_sysconfdir}/udev/rules.d/65-sane-backends.rules
+install -m 0644 tools/udev/sane-backends.hwdb %{buildroot}%{_udevhwdbdir}/20-sane-backends.hwdb
 # Shorten too long comments
-perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/60-libsane.rules
+perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/65-libsane.rules
 
 # (tpg) install services
 mkdir -p %{buildroot}%{_unitdir}
@@ -404,7 +406,8 @@ sed -i '/^%dir/d' sane-backends.lang
 %dir %{_sysconfdir}/sane.d
 #config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
-%{_sysconfdir}/udev/rules.d/*-libsane.rules
+%{_sysconfdir}/udev/rules.d/*.rules
+%{_udevhwdbdir}/*.hwdb
 %attr(1777,root,root) %dir /var/lib/lock/sane
 %if %epkowa_support
 # iscan files
