@@ -1,7 +1,7 @@
 Index: doc/descriptions/epson.desc
 ===================================================================
---- ./doc/descriptions/epson.desc
-+++ ./doc/descriptions/epson.desc	2010-05-03 09:47:04.000000000 +0200
+--- doc/descriptions/epson.desc
++++ doc/descriptions/epson.desc	2010-05-03 09:47:04.000000000 +0200
 @@ -172,7 +172,7 @@
  :status :complete
  
@@ -13,8 +13,8 @@ Index: doc/descriptions/epson.desc
  :model "Expression 1600"
 Index: doc/descriptions/epson2.desc
 ===================================================================
---- ./doc/descriptions/epson2.desc
-+++ ./doc/descriptions/epson2.desc	2010-05-03 09:48:31.000000000 +0200
+--- doc/descriptions/epson2.desc
++++ doc/descriptions/epson2.desc	2010-05-03 09:48:31.000000000 +0200
 @@ -239,7 +239,7 @@
  :comment    "overseas version of the GT-9500"
  
