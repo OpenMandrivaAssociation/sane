@@ -208,7 +208,7 @@ access image acquisition devices available on the local host.
 %patch22 -p1
 
 # Primax parallel port scanners
-%if %{with primax}
+%if %{primax_support}
 %setup -q -T -D -a 3 -n sane-backends-%{version}
 %endif
 
