@@ -372,6 +372,7 @@ cd ..
 
 # udev rules for libusb user support
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
+mkdir -p %{buildroot}%{_udevhwdbdir}
 install -m 0644 tools/udev/sane-backends.rules %{buildroot}%{_sysconfdir}/udev/rules.d/65-sane-backends.rules
 install -m 0644 tools/udev/sane-backends.hwdb %{buildroot}%{_udevhwdbdir}/20-sane-backends.hwdb
 # Shorten too long comments
