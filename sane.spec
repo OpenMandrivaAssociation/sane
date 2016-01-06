@@ -271,7 +271,7 @@ _topdir="$PWD"
 pushd tools
 ./sane-desc -m udev+hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.rules
 ./sane-desc -m hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.hwdb
-
+popd
 
 # Primax parallel port scanners
 %if %{primax_support}
