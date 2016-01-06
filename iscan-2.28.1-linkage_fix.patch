@@ -1,39 +1,43 @@
-diff -p -up sane-backends-1.0.20/iscan-2.20.1/backend/Makefile.am.linkage_fix sane-backends-1.0.20/iscan-2.20.1/backend/Makefile.am
---- sane-backends-1.0.20/iscan-2.20.1/backend/Makefile.am.linkage_fix	2009-07-22 02:50:45.000000000 +0200
-+++ sane-backends-1.0.20/iscan-2.20.1/backend/Makefile.am	2009-09-28 16:14:53.000000000 +0200
-@@ -30,6 +30,7 @@ AM_CPPFLAGS = \
- 	-DPKGLIBDIR=\"$(pkglibdir)\" \
- 	-DPKGLOCALSTATEDIR=\"$(localstatedir)/lib/$(PACKAGE_TARNAME)\" \
+--- sane-backends-1.0.22/iscan-2.28.1/backend/Makefile.am.linkage_fix	2011-12-01 02:30:53.000000000 +0100
++++ sane-backends-1.0.22/iscan-2.28.1/backend/Makefile.am	2011-12-23 07:15:10.770064595 +0100
+@@ -33,6 +33,7 @@
  	-DSYSCONFDIR=\"$(sysconfdir)\" \
+ 	-DENABLE_DEBUG=1 \
+ 	-DMSG_MODULE=\"epkowa\" \
 +	-I../$(top_srcdir)/include \
  	-I$(top_srcdir)
  AM_CFLAGS = \
  	-fPIC
-@@ -113,18 +114,19 @@ EXTRA_DIST = \
+@@ -121,21 +122,21 @@
  	epkowa.conf
  
  sane_backends_files = \
 -	../include/sane/sanei.h \
 -	../include/sane/sanei_config.h \
 -	../include/sane/sanei_debug.h \
+-	../include/sane/sanei_magic.h \
 -	../include/sane/sanei_pio.h \
 -	../include/sane/sanei_scsi.h \
 -	../include/sane/sanei_usb.h \
 +	../../include/sane/sanei.h \
 +	../../include/sane/sanei_config.h \
 +	../../include/sane/sanei_debug.h \
++	../../include/sane/sanei_magic.h \
 +	../../include/sane/sanei_pio.h \
 +	../../include/sane/sanei_scsi.h \
 +	../../include/sane/sanei_usb.h \
  	../sanei/linux_sg3_err.h \
 -	../sanei/sanei_config.c \
 -	../sanei/sanei_constrain_value.c \
+-	../sanei/sanei_init_debug.c \
+-	../sanei/sanei_magic.c \
 -	../sanei/sanei_pio.c \
 -	../sanei/sanei_scsi.c \
 -	../sanei/sanei_usb.c \
 +	../../sanei/sanei_config.c \
-+	../../sanei/sanei_init_debug.c \
 +	../../sanei/sanei_constrain_value.c \
++	../../sanei/sanei_init_debug.c \
++	../../sanei/sanei_magic.c \
 +	../../sanei/sanei_pio.c \
 +	../../sanei/sanei_scsi.c \
 +	../../sanei/sanei_usb.c \

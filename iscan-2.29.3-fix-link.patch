@@ -1,0 +1,10 @@
+--- configure.ac.orig	2014-09-24 06:41:44.754444670 -0400
++++ configure.ac	2014-09-24 06:42:07.426443639 -0400
+@@ -171,6 +171,7 @@
+     ],[
+         AC_CHECK_LIB([usb], [usb_get_busses])
+     ])
++AC_CHECK_LIB([m], [floor])
+ AC_CHECK_LIB([sane], [sane_init])
+ AC_CHECK_LIB([rt], [clock_gettime], [HAVE_LIBRT=1])
+ 

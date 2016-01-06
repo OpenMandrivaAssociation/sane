@@ -1,0 +1,49 @@
+--- sane-backends-1.0.22/doc/descriptions-external/brother2.desc.brother2list	2010-12-01 23:49:58.000000000 +0000
++++ sane-backends-1.0.22/doc/descriptions-external/brother2.desc	2012-03-11 23:08:01.015751925 +0000
+@@ -56,6 +56,21 @@
+ :interface "USB"
+ :usbid "0x04f9" "0x0190"
+ 
++:model "DCP-130C"
++:status :untested
++:interface "USB"
++:usbid "0x04f9" "0x01a8"
++
++:model "DCP-153C"
++:status :good
++:interface "USB"
++:usbid "0x04f9" "0x01e1"
++
++:model "DCP-195C"
++:status :untested
++:interface "USB"
++:usbid "0x04f9" "0x0222"
++
+ :model "DCP-310CN"
+ :status :untested
+ :interface "USB network"
+@@ -96,6 +111,11 @@
+ :interface "USB"
+ :usbid "0x04f9" "0x0184"
+ 
++:model "DCP-J125"
++:status :good
++:interface "USB"
++:usbid "0x04f9" "0x0253"
++
+ :model "MFC-210C"
+ :status :good
+ :interface "USB"
+@@ -113,6 +133,12 @@
+ :usbid "0x04f9" "0x01ab"
+ :comment "Reportedly working."
+ 
++:model "MFC-260C"
++:status :untested
++:interface "USB"
++:usbid "0x04f9" "0x01d6"
++:comment "brscan2 needed."
++
+ :model "MFC-3240C"
+ :status :untested
+ :interface "USB"

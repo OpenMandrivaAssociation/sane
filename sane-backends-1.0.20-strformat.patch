@@ -10,23 +10,3 @@ diff -p -up sane-backends-1.0.20/backend/rts8891.c.strformat sane-backends-1.0.2
      }
  
    /* initial sensor guess */
---- sane-backends-1.0.22/frontend/scanimage.c.str	2011-04-01 10:42:12.000000000 +0200
-+++ sane-backends-1.0.22/frontend/scanimage.c	2011-04-01 10:42:36.000000000 +0200
-@@ -1891,7 +1891,7 @@
- 				printf (start, int_arg);
- 				break;
- 			      case 0:
--				printf (start);
-+				printf ("%s", start);
- 				break;
- 			      }
- 			    *percent = cc;
-@@ -1905,7 +1905,7 @@
- 			  }
- 		      }
- 		    if (*start)
--		      printf (start);
-+		      printf ("%s",start);
- 		  }
- 	      }
- 	    if (i == 0 && ch != 'f')
