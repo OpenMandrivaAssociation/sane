@@ -206,7 +206,7 @@ access image acquisition devices available on the local host.
 # Fedora patches
 %patch20 -p1 -b .open-macro
 %patch21 -p1 -b .udev
-%patch22 -p1 -b .udev
+%patch22 -p1
 %patch23 -p1
 
 # Primax parallel port scanners
