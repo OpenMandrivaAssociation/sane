@@ -36,8 +36,8 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.0.24
-Release:	2.2
+Version:	1.0.25
+Release:	0.1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -68,7 +68,6 @@ Patch28:	sane-backends-1.0.20-group.patch
 Patch29:	sane-backends-1.0.22-primascan.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch30:	sane-backends-1.0.20-brother2list.patch
-Patch31:	sane-backends-1.0.22-strformat.patch
 # Debian patches
 # new build system breaks build when using pthreads.
 Patch101:       01_missing_pthreads.dpatch
@@ -85,7 +84,6 @@ Patch115:       24_sane-desc.c_debian_mods.dpatch
 
 # Fedora patches
 Patch202:	sane-backends-1.0.20-open-macro.patch
-Patch205:	sane-backends-1.0.20-epson-expression800.patch
 
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
@@ -188,7 +186,6 @@ access image acquisition devices available on the local host.
 %patch1 -p1 -b .plusteks12
 %patch28 -p1 -b .group
 %patch30 -p1 -b .brother2list
-%patch31 -p1 -b .strformat
 
 %patch101 -p1
 %patch106 -p1
@@ -197,7 +194,6 @@ access image acquisition devices available on the local host.
 
 # Fedora patches
 %patch202 -p1 -b .open-macro
-%patch205 -p1 -b .epson-expression800
 
 # Primax parallel port scanners
 %if %{primax_support}
@@ -383,6 +379,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %if %{primax_support}
 %{_bindir}/primax_scan
 %endif
+%{_bindir}/umax_pp
 %{_mandir}/man1/*
 %{_mandir}/man5/*
 %{_mandir}/man7/*
