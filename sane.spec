@@ -5,6 +5,7 @@
 %define devname	%mklibname %{name} %{major} -d
 
 %define _disable_lto 1
+%define Werror_cflags %{nil}
 %define _disable_rebuild_configure 1
 
 # All sane backends have SONAME libsane.so.1. We do not want
