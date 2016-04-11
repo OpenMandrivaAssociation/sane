@@ -5,7 +5,6 @@
 %define devname	%mklibname %{name} %{major} -d
 
 %define _disable_lto 1
-%define Werror_cflags %{nil}
 %define _disable_rebuild_configure 1
 
 # All sane backends have SONAME libsane.so.1. We do not want
@@ -90,6 +89,7 @@ Patch22:	xsane-network.patch
 Patch30:	iscan-2.29.3-fix-link.patch
 Patch31:	iscan-2.20.1-no_non-free_please.diff
 Patch32:	iscan-2.28.1-linkage_fix.patch
+Patch33:	aarch64-io-header.patch
 
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
@@ -213,6 +213,8 @@ access image acquisition devices available on the local host.
 %if %{primax_support}
 %setup -q -T -D -a 3 -n sane-backends-%{version}
 %endif
+
+%patch33 -p1
 
 # "primascan" backend
 # (commented out in dll.conf, as it claims to support every USB scanner)

@@ -1,0 +1,14 @@
+diff --git a/primaxscan-1.1.beta1/io.c b/primaxscan-1.1.beta1/io.c
+index 5ea9314..cf632b7 100644
+--- a/primaxscan-1.1.beta1/io.c
++++ b/primaxscan-1.1.beta1/io.c
+@@ -29,7 +29,9 @@
+ #include <fcntl.h>
+ #ifndef FREEBSD /* we surely run into troubles here, when porting
+ 				   to another platform */
++#ifndef __aarch64__
+ #include <sys/io.h> /* iopl() */
++#endif /* aarch64 */
+ #endif /* FREEBSD */
+ 
+ int set_iopl(int i)
