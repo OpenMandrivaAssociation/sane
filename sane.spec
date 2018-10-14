@@ -102,7 +102,8 @@ BuildRequires:	pkgconfig(libusb)
 BuildRequires:	pkgconfig(libusb-1.0)
 BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
-BuildRequires:	pkgconfig(libsystemd-daemon)
+BuildRequires:	pkgconfig(systemd)
+BuildRequires:	pkgconfig(libxml-2.0)
 %if %{gphoto2_support}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
