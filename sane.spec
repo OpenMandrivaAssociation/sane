@@ -38,8 +38,8 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.0.25
-Release:	2
+Version:	1.0.27
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -66,7 +66,7 @@ Patch1:		sane-backends-1.0.20-group.patch
 # (fc) list Brother MFC-260C, DCP130C as supported (Mdv bug # 52951)
 Patch2:		sane-backends-1.0.22-brother2list.patch
 Patch3:		sane-backends-1.0.20-strformat.patch
-Patch4:		sane-backends-1.0.23-have-pthread.patch
+#Patch4:		sane-backends-1.0.23-have-pthread.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -78,7 +78,7 @@ Patch11:	06_cap_always_settable.dpatch
 # Patch to the dll backend to look for pieces of dll.conf inside the
 # /etc/sane.d/dll.d/ directory. This is a facility for packages providing
 # external backends (like libsane-extras, hpoj and hplip).
-Patch12:	22_dll_backend_conf.dpatch
+#Patch12:	22_dll_backend_conf.dpatch
 Patch13:	24_sane-desc.c_debian_mods.dpatch
 
 # Fedora patches
@@ -198,11 +198,11 @@ access image acquisition devices available on the local host.
 %patch1 -p1 -b .group
 %patch2 -p1 -b .brother2list
 %patch3 -p1 -b .strformat
-%patch4 -p1 -b .pthread
+#patch4 -p1 -b .pthread
 
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
+#patch12 -p1
 %patch13 -p1
 
 # Fedora patches
@@ -344,7 +344,7 @@ EOF
 # Move documentation from /usr/doc to /usr/share/doc
 install -d %{buildroot}%{_docdir}/sane-backends-%{version}/
 install -d %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
-pushd %{buildroot}/usr/doc/sane-%{version}
+pushd %{buildroot}%{_docdir}/sane-backends
 #pushd %{buildroot}/usr/doc/sane-1.0.18-cvs
 mv `find -mindepth 1 -type d` *.html *.txt %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
 mv README README.linux %{buildroot}%{_docdir}/sane-backends-%{version}/
