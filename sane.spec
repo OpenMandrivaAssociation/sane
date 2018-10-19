@@ -39,7 +39,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.27
-Release:	1
+Release:	2
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -185,6 +185,7 @@ Summary:        SANE - local and remote scanner access
 Provides:       %{name} = %{version}-%{release}
 Provides:	saned = %{version}-%{release}
 Requires:	sane-backends >= %{version}-%{release}
+BuildRequires:	rpm-helper
 Requires(preun,post):	rpm-helper
 
 %description -n saned
