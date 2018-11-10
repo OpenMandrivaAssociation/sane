@@ -1,20 +1,15 @@
 %define iscanversion 2.30.1
-%define beta	%nil
-%define major	1
-%define libname	%mklibname %{name} %{major}
-%define devname	%mklibname %{name} %{major} -d
+%define beta %nil
+%define major 1
+%define libname %mklibname %{name} %{major}
+%define devname %mklibname %{name} %{major} -d
 
 %define _disable_lto 1
 %define _disable_rebuild_configure 1
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
-%if %{_use_internal_dependency_generator}
-%define __noautoprovfiles %{_libdir}/sane
-%else
-%define _exclude_files_from_autoprov  %{_libdir}/%{name}/
-%endif
-
+%define _exclude_files_from_autoprov %{_libdir}/%{name}/
 %define __libtoolize /bin/true
 
 # Setting this makes the /etc/sane.d/dll.conf empty so that scanning apps
@@ -39,7 +34,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.27
-Release:	3
+Release:	4
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -128,18 +123,18 @@ This package does not enable network scanning by default; if you wish
 to enable it, install the saned package.
 
 %package -n %{libname}
-Group: 		System/Kernel and hardware
-License: 	LGPLv2
-Summary: 	SANE - local and remote scanner access. This package contains the sane library
+Group:		System/Kernel and hardware
+License:	LGPLv2
+Summary:	SANE - local and remote scanner access. This package contains the sane library
 
 %description -n %{libname}
 This package contains the shared libraries for %{name}.
 
 %package -n %{devname}
-Group: 		Development/C
+Group:		Development/C
 License:	LGPL
-Summary: 	SANE - local and remote scanner access
-Requires: 	%{libname} = %{version}-%{release}
+Summary:	SANE - local and remote scanner access
+Requires:	%{libname} = %{version}-%{release}
 Provides:	sane-devel = %{version}-%{release}
 
 %description -n %{devname}
@@ -179,10 +174,10 @@ This package contains the SANE backend documentation for different
 scanners.
 
 %package -n saned
-Group:          System/Kernel and hardware
-License:        LGPLv2
-Summary:        SANE - local and remote scanner access
-Provides:       %{name} = %{version}-%{release}
+Group:		System/Kernel and hardware
+License:	LGPLv2
+Summary:	SANE - local and remote scanner access
+Provides:	%{name} = %{version}-%{release}
 Provides:	saned = %{version}-%{release}
 Requires:	sane-backends >= %{version}-%{release}
 BuildRequires:	rpm-helper
@@ -256,11 +251,11 @@ rm -f backend/dll.conf
 
 # clang uses newer inline semantics
 if echo %__cc |grep -q clang; then
-	sed -i -e 's,inline ,,g' primax*/lp.c
+    sed -i -e 's,inline ,,g' primax*/lp.c
 fi
 
 %build
-CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure \
+CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 	--disable-static \
 	--enable-rpath=no \
 	--enable-avahi \
@@ -269,7 +264,7 @@ CPPFLAGS="`pkg-config --cflags libusb-1.0`" %configure \
 	--without-gphoto2
 %endif
 
-%make
+%make_build
 
 # Write udev/hwdb files
 _topdir="$PWD"
@@ -283,20 +278,20 @@ popd
 chmod a+rx tools/sane-config
 cd primaxscan*
 autoreconf -fi
-PATH=`pwd`/../tools:${PATH}
+PATH=$(pwd)/../tools:${PATH}
 CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
 %configure \
 	--disable-static
 
-%make
-%make primax_scan
+%make_build
+%make_build primax_scan
 cd ..
 %endif
 
 # Epson Avasys driver for Epson scanners
 %if %{epkowa_support}
 chmod a+rx tools/sane-config
-PATH=`pwd`/tools:${PATH}
+PATH=$(pwd)/tools:${PATH}
 cd iscan-%{iscanversion}
 #sh ./bootstrap
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
@@ -305,12 +300,12 @@ export LDFLAGS="%{?ldflags} -lusb-1.0"
 %configure \
 	--disable-static \
 	--disable-frontend
-%make
+%make_build
 cd ..
 %endif
 
 %install
-%makeinstall_std
+%make_install
 
 # Create missing lock dir
 install -d %{buildroot}/var/lib/lock/sane
@@ -347,7 +342,7 @@ install -d %{buildroot}%{_docdir}/sane-backends-%{version}/
 install -d %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
 pushd %{buildroot}%{_docdir}/sane-backends
 #pushd %{buildroot}/usr/doc/sane-1.0.18-cvs
-mv `find -mindepth 1 -type d` *.html *.txt %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
+mv $(find -mindepth 1 -type d) *.html *.txt %{buildroot}%{_docdir}/sane-backends-doc-%{version}/
 mv README README.linux %{buildroot}%{_docdir}/sane-backends-%{version}/
 rm -f README.*
 mv * %{buildroot}%{_docdir}/sane-backends-%{version}/
@@ -356,7 +351,7 @@ popd
 # Primax parallel port scanners
 %if %{primax_support}
 cd primaxscan*
-%makeinstall
+%make_install
 rm -f %{buildroot}%{_libdir}/libsane-primax.a
 mv %{buildroot}%{_libdir}/libsane-primax* %{buildroot}%{_libdir}/sane/
 cp primax_scan %{buildroot}%{_bindir}
@@ -366,7 +361,7 @@ cd ..
 # Epson Avasys driver for Epson scanners
 %if %{epkowa_support}
 cd iscan-%{iscanversion}
-%makeinstall
+%make_install
 rm -f %{buildroot}%{_libdir}/sane/libsane-epkowa.a
 rm -f %{buildroot}%{_mandir}/man1/iscan.1*
 rm -rf %{buildroot}%{_libdir}/iscan
