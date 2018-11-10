@@ -279,7 +279,7 @@ chmod a+rx tools/sane-config
 cd primaxscan*
 autoreconf -fi
 PATH=$(pwd)/../tools:${PATH}
-CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I`pwd`/../include -L`pwd`/../backend/.libs/"\
+CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I$(pwd)/../include -L$(pwd)/../backend/.libs/"\
 %configure \
 	--disable-static
 
@@ -294,8 +294,8 @@ chmod a+rx tools/sane-config
 PATH=$(pwd)/tools:${PATH}
 cd iscan-%{iscanversion}
 #sh ./bootstrap
-export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
-export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} `pkg-config --cflags libusb-1.0` -I`pwd`/../include -L`pwd`/../backend/ -fPIC"
+export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../backend/ -fPIC"
+export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../backend/ -fPIC"
 export LDFLAGS="%{?ldflags} -lusb-1.0"
 %configure \
 	--disable-static \
@@ -353,8 +353,6 @@ popd
 cd primaxscan*
 %make_install
 rm -f %{buildroot}%{_libdir}/libsane-primax.a
-mv %{buildroot}%{_libdir}/libsane-primax* %{buildroot}%{_libdir}/sane/
-cp primax_scan %{buildroot}%{_bindir}
 cd ..
 %endif
 
