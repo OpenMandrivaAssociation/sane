@@ -353,6 +353,10 @@ popd
 cd primaxscan*
 %make_install
 rm -f %{buildroot}%{_libdir}/libsane-primax.a
+%if %{_lib} == "lib64"
+mv %{buildroot}%{_prefix}/lib/sane/libsane-primax* %{buildroot}%{_libdir}/sane/ ||:
+rm -rf %{buildroot}%{_prefix}/lib/sane
+%endif
 cd ..
 %endif
 
