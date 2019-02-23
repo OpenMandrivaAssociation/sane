@@ -1,0 +1,14 @@
+diff -up sane-backends-1.0.27/iscan-2.30.1/sanei/sanei_pio.c.omv~ sane-backends-1.0.27/sanei/sanei_pio.c
+--- sane-backends-1.0.27/iscan-2.30.1/sanei/sanei_pio.c.omv~	2019-02-23 21:59:34.268525843 +0100
++++ sane-backends-1.0.27/iscan-2.30.1/sanei/sanei_pio.c	2019-02-23 22:00:46.818778370 +0100
+@@ -70,6 +70,10 @@
+ # include <sys/hw.h>
+ #elif defined(__i386__)  && defined (__GNUC__)
+ 
++typedef unsigned char u_char;
++typedef unsigned short u_short;
++typedef unsigned long u_long;
++
+ static __inline__ void
+ outb (u_char value, u_long port)
+ {
