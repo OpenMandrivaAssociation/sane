@@ -1,0 +1,12 @@
+diff -up sane-backends-1.0.27/iscan-2.30.1/backend/epkowa.c.omv~ sane-backends-1.0.27/iscan-2.30.1/backend/epkowa.c
+--- sane-backends-1.0.27/iscan-2.30.1/backend/epkowa.c.omv~	2019-02-23 19:32:51.976013148 +0100
++++ sane-backends-1.0.27/iscan-2.30.1/backend/epkowa.c	2019-02-23 19:35:37.747508424 +0100
+@@ -5356,7 +5356,7 @@ adf_handle_adjust_alignment (Epson_Scann
+     adf_scan_area.height = s->hw->src->y_range.max;
+   }
+ 
+-  if (FSI_CAP_DPOS_RIGT == s->hw->fsi_cap_3 & FSI_CAP_DPOS_MASK)
++  if (FSI_CAP_DPOS_RIGT == (s->hw->fsi_cap_3 & FSI_CAP_DPOS_MASK))
+   {
+     sides = 1;                  /* put whole shift on one side */
+   }

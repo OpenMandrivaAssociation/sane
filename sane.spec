@@ -26,7 +26,7 @@
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
 %define epkowa_support 1
-#ifarch alpha ppc sparc %arm %mips
+#ifarch alpha ppc sparc arm mips
 #define primax_support 0
 #define epkowa_support 0
 #endif
@@ -34,7 +34,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.27
-Release:	4
+Release:	5
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -62,6 +62,7 @@ Patch1:		sane-backends-1.0.20-group.patch
 Patch2:		sane-backends-1.0.22-brother2list.patch
 Patch3:		sane-backends-1.0.20-strformat.patch
 #Patch4:		sane-backends-1.0.23-have-pthread.patch
+Patch5:		epkowa-compile.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -239,6 +240,7 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 
 %if %epkowa_support
 pushd iscan-%{iscanversion}
+%patch5 -p2 -b .epkowa~
 %patch30 -p0 -b .iscan-2.10.0-1_fix_link
 %patch31 -p0 -b .no_non-free_please
 %patch32 -p2 -b .linkage_fix
