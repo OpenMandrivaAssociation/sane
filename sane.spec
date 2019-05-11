@@ -211,9 +211,9 @@ access image acquisition devices available on the local host.
 # Primax parallel port scanners
 %if %{with primax}
 %setup -q -T -D -a 3 -n sane-backends-%{version}
+%patch33 -p1
 %endif
 
-%patch33 -p1
 
 # "primascan" backend
 # (commented out in dll.conf, as it claims to support every USB scanner)
