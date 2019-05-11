@@ -22,7 +22,7 @@
 %bcond_without v4l
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
-%define primax_support 1
+%bcond_without	primax
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
 %define epkowa_support 1
@@ -209,7 +209,7 @@ access image acquisition devices available on the local host.
 %patch22 -p1
 
 # Primax parallel port scanners
-%if %{primax_support}
+%if %{with primax}
 %setup -q -T -D -a 3 -n sane-backends-%{version}
 %endif
 
@@ -278,7 +278,7 @@ pushd tools
 popd
 
 # Primax parallel port scanners
-%if %{primax_support}
+%if %{with primax}
 chmod a+rx tools/sane-config
 cd primaxscan*
 autoreconf -fi
@@ -353,7 +353,7 @@ mv * %{buildroot}%{_docdir}/sane-backends-%{version}/
 popd
 
 # Primax parallel port scanners
-%if %{primax_support}
+%if %{with primax}
 cd primaxscan*
 %make_install
 rm -f %{buildroot}%{_libdir}/libsane-primax.a
@@ -404,7 +404,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_bindir}/sane-find-scanner
 %{_bindir}/scanimage
 %{_bindir}/gamma4scanimage
-%if %{primax_support}
+%if %{with primax}
 %{_bindir}/primax_scan
 %endif
 %{_bindir}/umax_pp
