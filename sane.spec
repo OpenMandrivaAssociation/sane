@@ -18,7 +18,7 @@
 # installed scanners then)
 %define empty_dll_conf 0
 
-%define gphoto2_support 1
+%bcond_without gphoto2
 %define v4l_support 1
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
@@ -101,7 +101,7 @@ BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libxml-2.0)
-%if %{gphoto2_support}
+%if %{with gphoto2}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
 %if %{v4l_support}
@@ -264,7 +264,7 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 	--enable-rpath=no \
 	--enable-avahi \
 	--enable-libusb_1_0 \
-%if !%{gphoto2_support}
+%if !%{with gphoto2}
 	--without-gphoto2
 %endif
 
