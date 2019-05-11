@@ -19,7 +19,7 @@
 %define empty_dll_conf 0
 
 %bcond_without gphoto2
-%define v4l_support 1
+%bcond_without v4l
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
 %define primax_support 1
@@ -104,7 +104,7 @@ BuildRequires:	pkgconfig(libxml-2.0)
 %if %{with gphoto2}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
-%if %{v4l_support}
+%if %{with v4l}
 BuildRequires:	pkgconfig(libv4l1)
 %endif
 # ensure resmgr is not pulled
