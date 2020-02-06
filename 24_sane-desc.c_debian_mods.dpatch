@@ -51,14 +51,3 @@ diff -urNad sane-backends-1.0.20~/tools/sane-desc.c sane-backends-1.0.20/tools/s
  	  else
  	    printf ("<td align=center>?</td>\n");
  
-@@ -2738,8 +2738,8 @@
-   printf
-     ("</head>\n"
-      "<body bgcolor=FFFFFF>\n"
--     "<div align=center>\n"
--     "<img src=\"http://www.sane-project.org/images/sane.png\" alt=\"SANE\">\n");
-+     "<div align=center>\n");
-+  /*     "<img src=\"http://www.sane-project.org/images/sane.png\" alt=\"SANE\">\n"); */
-   printf ("<h1>%s</h1>\n", title);
-   printf ("</div>\n" "<hr>\n");
-   printf ("%s\n", intro);
