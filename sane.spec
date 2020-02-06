@@ -79,7 +79,7 @@ Patch11:	06_cap_always_settable.dpatch
 Patch13:	24_sane-desc.c_debian_mods.dpatch
 
 # Fedora patches
-Patch20:	sane-backends-1.0.20-open-macro.patch
+#Patch20:	sane-backends-1.0.20-open-macro.patch
 Patch21:	sane-backends-1.0.23-udev.patch
 Patch22:	xsane-network.patch
 
@@ -204,7 +204,7 @@ access image acquisition devices available on the local host.
 %patch13 -p1
 
 # Fedora patches
-%patch20 -p1 -b .open-macro
+#patch20 -p1 -b .open-macro
 %patch21 -p1 -b .udev
 %patch22 -p1
 
