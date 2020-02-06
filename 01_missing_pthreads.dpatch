@@ -1,5 +1,5 @@
---- /home/x/Pulpit/sane-backends-1.0.29/backend/Makefile.in
-+++ /home/x/Pulpit/sane-backends-1.0.29/backend/Makefile-new.in
+--- /sane-backends-1.0.29/backend/Makefile.in
++++ /sane-backends-1.0.29/backend/Makefile-new.in
 @@ -2596,7 +2596,7 @@
  lib_LTLIBRARIES = libsane.la
  sanelibdir = $(libdir)/sane
