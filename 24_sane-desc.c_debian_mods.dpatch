@@ -27,15 +27,6 @@ exit 0
 diff -urNad sane-backends-1.0.20~/tools/sane-desc.c sane-backends-1.0.20/tools/sane-desc.c
 --- sane-backends-1.0.20~/tools/sane-desc.c	2009-04-15 03:47:56.000000000 +0200
 +++ sane-backends-1.0.20/tools/sane-desc.c	2009-05-04 11:10:28.572357083 +0200
-@@ -46,7 +46,7 @@
- 
- #define SANE_DESC_VERSION "3.5"
- 
--#define MAN_PAGE_LINK "http://www.sane-project.org/man/%s.5.html"
-+#define MAN_PAGE_LINK "/usr/share/doc/libsane/html/%s.5.html"
- #define COLOR_MINIMAL      "\"#B00000\""
- #define COLOR_BASIC        "\"#FF9000\""
- #define COLOR_GOOD         "\"#90B000\""
 @@ -2476,8 +2476,8 @@
  		  printf ("<br>\n");
  		}
