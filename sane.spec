@@ -33,8 +33,8 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.0.27
-Release:	7
+Version:	1.0.29
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
