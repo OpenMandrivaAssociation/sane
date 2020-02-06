@@ -259,6 +259,7 @@ if echo %__cc |grep -q clang; then
 fi
 
 %build
+autoreconf -if
 CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 	--disable-static \
 	--enable-rpath=no \
