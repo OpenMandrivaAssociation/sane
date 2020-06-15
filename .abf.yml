@@ -1,9 +1,10 @@
 removed_sources:
   sane-backends-1.0.23.tar.gz: 62fc65736879f0bdb2fda20a31ee10d1ed335ae7
+  sane-backends-1.0.27.tar.gz: 579ec4d6279c7f0f02014358a7e74056672a1e43
 sources:
   iscan_2.30.1-1-free.tar.bz2: 15ab9a308ac88d0e6f947b4e59e6646429004d29
   primaxscan-1.1.beta1.tar.bz2: 66fa1b44258916ea8d437c4a3636a78fc657b139
   sane-backend-geniusvp2_1.0.16.1.tar.gz: 4af825c231c8c048f8145af26b8fda3b66cb8be8
-  sane-backends-1.0.27.tar.gz: 579ec4d6279c7f0f02014358a7e74056672a1e43
+  sane-backends-1.0.30.tar.gz: 4f6a2e56d92d15a58dcabcba76a36929a2fd882f
   sane-driver-0.2.tar.bz2: 5364b5fd66788908e989c58c1afa3ce4cfcf8104
   sane_hp_rts88xx-0.18.tar.bz2: 213b4f9696c2684b5fc45ce8f77b6f6fed4afaca
