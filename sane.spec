@@ -1,8 +1,15 @@
+# sane is used by wine
+%ifarch %{x86_64}
+%bcond_without compat32
+%endif
+
 %define iscanversion 2.30.1
 %define beta %nil
 %define major 1
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} %{major} -d
+%define lib32name %mklib32name %{name} %{major}
+%define dev32name %mklib32name %{name} %{major} -d
 
 %define _disable_lto 1
 %define _disable_rebuild_configure 1
@@ -34,7 +41,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.30
-Release:	1
+Release:	2
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -64,6 +71,7 @@ Patch3:		sane-backends-1.0.20-strformat.patch
 #Patch4:		sane-backends-1.0.23-have-pthread.patch
 Patch5:		epkowa-compile.patch
 Patch6:		sanei-pio-buildfix.patch
+Patch7:		sane-1.0.30-autoconk.patch
 
 # Debian patches
 # new build system breaks build when using pthreads.
@@ -76,7 +84,6 @@ Patch11:	06_cap_always_settable.dpatch
 # /etc/sane.d/dll.d/ directory. This is a facility for packages providing
 # external backends (like libsane-extras, hpoj and hplip).
 #Patch12:	22_dll_backend_conf.dpatch
-Patch13:	24_sane-desc.c_debian_mods.dpatch
 
 # Fedora patches
 Patch20:	sane-backends-1.0.20-open-macro.patch
@@ -109,6 +116,16 @@ BuildRequires:	pkgconfig(libv4l1)
 %endif
 # ensure resmgr is not pulled
 BuildConflicts:	resmgr-devel
+%if %{with compat32}
+BuildRequires:	devel(libintl)
+BuildRequires:	devel(libieee1284)
+BuildRequires:	devel(libltdl)
+BuildRequires:	devel(libjpeg)
+BuildRequires:	devel(libtiff)
+BuildRequires:	devel(libusb-1.0)
+BuildRequires:	devel(libsystemd)
+BuildRequires:	devel(libxml2)
+%endif
 
 %description
 SANE (Scanner Access Now Easy) is a sane and simple interface
@@ -189,6 +206,27 @@ Requires(preun,post):	rpm-helper
 This package contains saned, a daemon that allows remote clients to
 access image acquisition devices available on the local host.
 
+%if %{with compat32}
+%package -n %{lib32name}
+Group:		System/Kernel and hardware
+License:	LGPLv2
+Summary:	SANE - local and remote scanner access. This package contains the sane library (32-bit)
+
+%description -n %{lib32name}
+This package contains the shared libraries for %{name}.
+
+%package -n %{dev32name}
+Group:		Development/C
+License:	LGPL
+Summary:	SANE - local and remote scanner access (32-bit)
+Requires:	%{devname} = %{version}-%{release}
+Requires:	%{lib32name} = %{version}-%{release}
+
+%description -n %{dev32name}
+This package contains the headers and development libraries necessary 
+to develop applications using SANE.
+%endif
+
 %prep
 %setup -qn sane-backends-%{version}%{beta}
 
@@ -197,16 +235,16 @@ access image acquisition devices available on the local host.
 %patch2 -p1 -b .brother2list
 %patch3 -p1 -b .strformat
 #patch4 -p1 -b .pthread
+%patch7 -p1 -b .autoconk~
 
-%patch10 -p1
+%patch10 -p1 -b .pthread~
 %patch11 -p1
 #patch12 -p1
-%patch13 -p1
 
 # Fedora patches
 %patch20 -p1 -b .open-macro
 %patch21 -p1 -b .udev
-%patch22 -p1
+%patch22 -p1 -b .net
 
 # Primax parallel port scanners
 %if %{with primax}
@@ -258,7 +296,18 @@ if echo %__cc |grep -q clang; then
     sed -i -e 's,inline ,,g' primax*/lp.c
 fi
 
-%build
+export CONFIGURE_TOP="$(pwd)"
+%if %{with compat32}
+mkdir build32
+cd build32
+%configure32 \
+	--enable-rpath \
+	--enable-libusb_1_0
+cd ..
+%endif
+
+mkdir build
+cd build
 CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 	--disable-static \
 	--enable-rpath=no \
@@ -268,7 +317,11 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 	--without-gphoto2
 %endif
 
-%make_build
+%build
+%if %{with compat32}
+%make_build -C build32
+%endif
+%make_build -C build
 
 # Write udev/hwdb files
 _topdir="$PWD"
@@ -309,7 +362,10 @@ cd ..
 %endif
 
 %install
-%make_install
+%if %{with compat32}
+%make_install -C build32
+%endif
+%make_install -C build
 
 # Create missing lock dir
 install -d %{buildroot}/var/lib/lock/sane
@@ -458,3 +514,15 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_mandir}/man8/saned*
 #config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %{_unitdir}/saned*.s*
+
+%if %{with compat32}
+%files -n %{lib32name}
+%{_prefix}/lib/*.so.%{major}*
+%dir %{_prefix}/lib/sane
+%{_prefix}/lib/sane/*.so.*
+
+%files -n %{dev32name}
+%{_prefix}/lib/*.so
+%{_prefix}/lib/sane/*.so
+%{_prefix}/lib/pkgconfig/*.pc
+%endif
