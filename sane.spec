@@ -95,6 +95,7 @@ Patch31:	iscan-2.20.1-no_non-free_please.diff
 Patch32:	iscan-2.28.1-linkage_fix.patch
 Patch33:	aarch64-io-header.patch
 
+BuildRequires:	autoconf automake autoconf-archive
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
 BuildRequires:	ieee1284-devel
@@ -326,6 +327,7 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 # Write udev/hwdb files
 _topdir="$PWD"
 pushd tools
+mkdir udev
 ./sane-desc -m udev+hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.rules
 ./sane-desc -m hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.hwdb
 popd
