@@ -412,7 +412,7 @@ sed -i '/^%dir/d' sane-backends.lang
 %{_mandir}/man5/*
 %{_mandir}/man7/*
 %dir %{_sysconfdir}/sane.d
-%config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
+#config(noreplace) %{_sysconfdir}/sane.d/*[^saned]
 %config(noreplace) %{_sysconfdir}/sane.d/*
 %{_sysconfdir}/udev/rules.d/*.rules
 %{_udevhwdbdir}/*.hwdb
@@ -456,5 +456,5 @@ sed -i '/^%dir/d' sane-backends.lang
 %files -n saned
 %{_sbindir}/*
 %{_mandir}/man8/saned*
-%config(noreplace) %{_sysconfdir}/sane.d/saned.conf
+#config(noreplace) %{_sysconfdir}/sane.d/saned.conf
 %{_unitdir}/saned*.s*
