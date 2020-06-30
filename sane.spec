@@ -126,6 +126,9 @@ BuildRequires:	devel(libtiff)
 BuildRequires:	devel(libusb-1.0)
 BuildRequires:	devel(libsystemd)
 BuildRequires:	devel(libxml2)
+BuildRequires:	devel(libudev)
+BuildRequires:	devel(libcurl)
+BuildRequires:	devel(libv4l2)
 %endif
 
 %description
@@ -301,7 +304,7 @@ export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 mkdir build32
 cd build32
-%configure32 \
+CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure32 \
 	--enable-rpath \
 	--enable-libusb_1_0
 cd ..
@@ -326,19 +329,18 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 
 # Write udev/hwdb files
 _topdir="$PWD"
-pushd tools
-mkdir udev
+pushd build/tools
 ./sane-desc -m udev+hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.rules
 ./sane-desc -m hwdb -s "${_topdir}/doc/descriptions:${_topdir}/doc/descriptions-external" -d0 > udev/sane-backends.hwdb
 popd
 
 # Primax parallel port scanners
 %if %{with primax}
-chmod a+rx tools/sane-config
+chmod a+rx build/tools/sane-config
 cd primaxscan*
 autoreconf -fi
-PATH=$(pwd)/../tools:${PATH}
-CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I$(pwd)/../include -L$(pwd)/../backend/.libs/"\
+PATH=$(pwd)/../build/tools:${PATH}
+CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} -fPIC -I$(pwd)/../include -L$(pwd)/../build/backend/.libs/"\
 %configure \
 	--disable-static
 
@@ -349,13 +351,13 @@ cd ..
 
 # Epson Avasys driver for Epson scanners
 %if %{epkowa_support}
-chmod a+rx tools/sane-config
-PATH=$(pwd)/tools:${PATH}
+chmod a+rx build/tools/sane-config
+PATH=$(pwd)/build/tools:${PATH}
 cd iscan-%{iscanversion}
 #sh ./bootstrap
-export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../backend/ -fPIC"
-export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../backend/ -fPIC"
-export LDFLAGS="%{?ldflags} -lusb-1.0"
+export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../build/backend/ -fPIC"
+export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../build/backend/ -fPIC"
+export LDFLAGS="${RPM_OPT_FLAGS/-ffast-math/} %{?ldflags} -lusb-1.0"
 %configure \
 	--disable-static \
 	--disable-frontend
@@ -415,7 +417,7 @@ popd
 cd primaxscan*
 %make_install
 rm -f %{buildroot}%{_libdir}/libsane-primax.a
-%if %{_lib} == "lib64"
+%if "%{_lib}" == "lib64"
 mv %{buildroot}%{_prefix}/lib/sane/libsane-primax* %{buildroot}%{_libdir}/sane/ ||:
 rm -rf %{buildroot}%{_prefix}/lib/sane
 %endif
@@ -437,8 +439,8 @@ cd ..
 # udev rules for libusb user support
 mkdir -p %{buildroot}/%{_sysconfdir}/udev/rules.d
 mkdir -p %{buildroot}%{_udevhwdbdir}
-install -m 0644 tools/udev/sane-backends.rules %{buildroot}%{_sysconfdir}/udev/rules.d/65-sane-backends.rules
-install -m 0644 tools/udev/sane-backends.hwdb %{buildroot}%{_udevhwdbdir}/20-sane-backends.hwdb
+install -m 0644 build/tools/udev/sane-backends.rules %{buildroot}%{_sysconfdir}/udev/rules.d/65-sane-backends.rules
+install -m 0644 build/tools/udev/sane-backends.hwdb %{buildroot}%{_udevhwdbdir}/20-sane-backends.hwdb
 # Shorten too long comments
 perl -p -i -e 's/(\#.{500}).*$/$1 .../' %{buildroot}/%{_sysconfdir}/udev/rules.d/65-libsane.rules
 
@@ -520,11 +522,8 @@ sed -i '/^%dir/d' sane-backends.lang
 %if %{with compat32}
 %files -n %{lib32name}
 %{_prefix}/lib/*.so.%{major}*
-%dir %{_prefix}/lib/sane
-%{_prefix}/lib/sane/*.so.*
 
 %files -n %{dev32name}
 %{_prefix}/lib/*.so
-%{_prefix}/lib/sane/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %endif
