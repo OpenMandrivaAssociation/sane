@@ -1,0 +1,46 @@
+diff -Naur sane-backends-1.0.32/tools/sane-desc.c sane-backends-1.0.32.tpg/tools/sane-desc.c
+--- sane-backends-1.0.32/tools/sane-desc.c	2021-02-14 11:25:19.000000000 +0000
++++ sane-backends-1.0.32.tpg/tools/sane-desc.c	2021-10-12 14:29:50.585635747 +0000
+@@ -55,8 +55,8 @@
+ #define COLOR_NEW          "\"#F00000\""
+ #define COLOR_UNKNOWN      "\"#000000\""
+ 
+-#define DEVMODE  "0664"
+-#define DEVOWNER "root"
++#define DEVMODE  "0644"
++#define DEVOWNER "usb"
+ #define DEVGROUP "scanner"
+ 
+ #ifndef PATH_MAX
+@@ -3554,7 +3554,8 @@
+     }
+ 
+   printf("\n# The following rule will disable USB autosuspend for the device\n");
+-  printf("ENV{libsane_matched}==\"yes\", RUN+=\"/bin/sh -c 'if test -e /sys/$env{DEVPATH}/power/control; then echo on > /sys/$env{DEVPATH}/power/control; elif test -e /sys/$env{DEVPATH}/power/level; then echo on > /sys/$env{DEVPATH}/power/level; fi'\"\n");
++  printf("ENV{libsane_matched}==\"yes\", TEST==\"power/control\", ATTR{power/control}=\"on\"\n");
++  printf("ENV{libsane_matched}==\"yes\", TEST!=\"power/control\", TEST==\"power/level\", ATTR{power/level}=\"on\"\n");
+ 
+   printf ("\nLABEL=\"libsane_usb_rules_end\"\n\n");
+ 
+@@ -3631,10 +3632,8 @@
+     }
+   printf ("LABEL=\"libsane_scsi_rules_end\"\n");
+ 
+-  if (mode == output_mode_udevacl)
+-    printf("\nENV{libsane_matched}==\"yes\", RUN+=\"/bin/setfacl -m g:%s:rw $env{DEVNAME}\"\n", DEVGROUP);
+-  else
+-    printf ("\nENV{libsane_matched}==\"yes\", MODE=\"664\", GROUP=\"scanner\"\n");
++  if (mode != output_mode_udevacl)
++    printf ("\nENV{libsane_matched}==\"yes\", MODE=\"%s\", GROUP=\"%s\"\n", DEVMODE, DEVGROUP);
+ 
+   printf ("\nLABEL=\"libsane_rules_end\"\n");
+ }
+@@ -3680,7 +3679,7 @@
+   printf("ACTION==\"remove\", GOTO=\"libsane_rules_end\"\n\n");
+ 
+   printf("# The following rule will disable USB autosuspend for the device\n");
+-  printf("ENV{DEVTYPE}==\"usb_device\", ENV{libsane_matched}==\"yes\", TEST==\"power/control\", ATTR{power/control}=\"on\"\n\n");
++  printf("ENV{DEVTYPE}==\"usb_device\", ENV{libsane_matched}==\"yes\", TEST!=\"power/control\", TEST==\"power/level\", ATTR{power/level}=\"on\"\n");
+ 
+   printf ("SUBSYSTEMS==\"scsi\", GOTO=\"libsane_scsi_rules_begin\"\n");
+   printf ("GOTO=\"libsane_rules_end\"\n\n");

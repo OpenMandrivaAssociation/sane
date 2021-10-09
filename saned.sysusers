@@ -1,0 +1,4 @@
+u saned - "SANE daemon user" /etc/sane.d /bin/false
+m saned cdwriter
+m saned usb
+m saned scanner

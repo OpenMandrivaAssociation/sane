@@ -1,0 +1,63 @@
+When reading config files, the iscan code temporarily sets LC_CTYPE to "C".
+But the original code to preserve and restore the old value was wrong, so
+LC_CTYPE was left set to "C". This caused incorrect behaviour in programs
+using the sane backend, e.g. simple-scan (mga#27934).
+
+--- backend/cfg-obj.c.orig	2020-12-28 12:32:36.187192024 +0000
++++ backend/cfg-obj.c	2020-12-28 13:57:08.219537145 +0000
+@@ -293,7 +293,8 @@
+       return _cfg;
+     }
+ 
+-  lc_ctype = setlocale (LC_CTYPE, "C");
++  lc_ctype = strdup (setlocale (LC_CTYPE, NULL));
++  setlocale (LC_CTYPE, "C");
+ 
+   if (pkgdatadir)
+     {
+@@ -385,6 +386,7 @@
+     }
+ 
+   setlocale (LC_CTYPE, lc_ctype);
++  free (lc_ctype);
+ 
+   /* For backwards compatibity with older configuration files.
+    */
+@@ -654,7 +656,8 @@
+ 
+   require (line && size && fp);
+ 
+-  lc_ctype = setlocale (LC_CTYPE, "C");
++  lc_ctype = strdup (setlocale (LC_CTYPE, NULL));
++  setlocale (LC_CTYPE, "C");
+ 
+   while (!valid && -1 != (n = getline (line, size, fp)))
+     {
+@@ -700,6 +703,7 @@
+     }
+ 
+   setlocale (LC_CTYPE, lc_ctype);
++  free (lc_ctype);
+ 
+   return (-1 == n ? num_of (_cfg_key) : id);
+ }
+--- backend/hw-data.c.orig	2020-12-28 12:32:43.219229215 +0000
++++ backend/hw-data.c	2020-12-28 13:56:31.155344016 +0000
+@@ -112,7 +112,8 @@
+           channel_recv (ch, reply, num_of (reply) - 1, &status);
+           if (SANE_STATUS_GOOD == status)
+             {
+-              char *lc_ctype = setlocale (LC_CTYPE, "C");
++              char *lc_ctype = strdup (setlocale (LC_CTYPE, NULL));
++              setlocale (LC_CTYPE, "C");
+               size_t n = num_of (reply);
+ 
+               do
+@@ -126,6 +127,7 @@
+                                               */
+               fw_name = strdup (reply + 26);
+               setlocale (LC_CTYPE, lc_ctype);
++              free (lc_ctype);
+             }
+         }
+     }
