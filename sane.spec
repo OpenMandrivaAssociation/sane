@@ -1,6 +1,6 @@
 # sane is used by wine
 %ifarch %{x86_64}
-%bcond_with compat32
+%bcond_without compat32
 %endif
 
 %define iscanversion 2.30.4
@@ -44,7 +44,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.0.32
-Release:	1
+Release:	2
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -537,8 +537,10 @@ sed -i '/^%dir/d' sane-backends.lang
 %if %{with compat32}
 %files -n %{lib32name}
 %{_prefix}/lib/*.so.%{major}*
+%{_prefix}/lib/sane/*.so.%{major}*
 
 %files -n %{dev32name}
 %{_prefix}/lib/*.so
+%{_prefix}/lib/sane/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %endif
