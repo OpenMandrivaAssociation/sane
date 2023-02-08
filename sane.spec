@@ -44,7 +44,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.1.1
-Release:	3
+Release:	4
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -120,7 +120,7 @@ BuildRequires:	autoconf
 # ensure resmgr is not pulled
 BuildConflicts:	resmgr-devel
 %if %{with compat32}
-BuildRequires:	devel(libintl)
+# BuildRequires:	devel(libintl)
 BuildRequires:	devel(libieee1284)
 BuildRequires:	devel(libltdl)
 BuildRequires:	devel(libjpeg)
