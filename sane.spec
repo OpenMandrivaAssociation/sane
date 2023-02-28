@@ -43,14 +43,14 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.1.1
-Release:	5
+Version:	1.2.1
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
 Url:		http://www.sane-project.org/
-Source0:	https://gitlab.com/sane-project/backends/-/releases/%{version}/sane-backends-%{version}.tar.gz
+Source0:	https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/sane-backends-%{version}.tar.gz
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
@@ -75,8 +75,6 @@ Patch3:		sane-backends-1.0.20-strformat.patch
 Patch5:		epkowa-compile.patch
 
 # Debian patches
-# new build system breaks build when using pthreads.
-Patch10:	01_missing_pthreads.dpatch
 # add back SANE_CAP_ALWAYS_SETTABLE which was mistakenly
 # removed from SANE 1.0.20
 Patch11:	06_cap_always_settable.dpatch
@@ -240,7 +238,6 @@ to develop applications using SANE.
 %patch2 -p1 -b .brother2list
 %patch3 -p1 -b .strformat
 
-%patch10 -p1 -b .pthread~
 %patch11 -p1
 
 # Fedora patches
@@ -298,12 +295,14 @@ if echo %__cc |grep -q clang; then
 fi
 %endif
 
+[ -e configure ] || ./autogen.sh
+
 %build
 export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 mkdir build32
 cd build32
-CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure32 \
+CPPFLAGS="$(pkg-config --cflags libusb-1.0 libgphoto2)" %configure32 \
 	--enable-rpath \
 	--enable-libusb_1_0
 
@@ -312,7 +311,7 @@ cd ..
 
 mkdir build
 cd build
-CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
+CPPFLAGS="$(pkg-config --cflags libusb-1.0 libgphoto2)" %configure \
 	--disable-static \
 	--enable-rpath=no \
 	--enable-avahi \
@@ -325,7 +324,7 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0)" %configure \
 cd ..
 
 %if %{with compat32}
-%make_build -C build32
+%make_build -C build32 GPHOTO2_CPPFLAGS="$(pkg-config --cflags-only-I libgphoto2)"
 %endif
 %make_build -C build
 
