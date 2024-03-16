@@ -16,7 +16,7 @@
 
 # All sane backends have SONAME libsane.so.1. We do not want
 # sane-backends-iscan to provide libsane.so.1, so filter these out.
-%define _exclude_files_from_autoprov %{_libdir}/%{name}/
+%define __provides_exclude_from %{_libdir}/%{name}/.*\.so.*
 %define __libtoolize /bin/true
 
 # Setting this makes the /etc/sane.d/dll.conf empty so that scanning apps
@@ -31,20 +31,17 @@
 # Switch to disable the compilation of the "primax" backend in case of
 # problems
 %bcond_with primax
-# Switch to disable the compilation of the "epkowa" backend in case of
-# problems
-%bcond_with epkowa
 %else
 %bcond_with primax
+%endif
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
-%bcond_with epkowa
-%endif
+%bcond_without epkowa
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.2.1
-Release:	3
+Release:	4
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -350,19 +347,24 @@ cd ..
 
 # Epson Avasys driver for Epson scanners
 %if %{with epkowa}
+sed -i -e 's,../include/sane/config.h,../build/include/sane/config.h,' sanei/*.{c,h}
+cp include/sane/sanei_directio.h include/sane/sanei_directio.h.epkowa~
+sed -i -e 's,extern int sanei_ioperm,//,;s,extern unsigned char sanei_inb,//,;s,extern void sanei_outb,//,' include/sane/sanei_directio.h
 chmod a+rx build/tools/sane-config
 PATH=$(pwd)/build/tools:${PATH}
 cd iscan-%{iscanversion}
 cp -f /usr/share/aclocal/libtool.m4 m4/.
 autoreconf -fi
-export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../build/backend/ -fPIC"
-export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -L$(pwd)/../build/backend/ -fPIC"
+export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -isystem $(pwd)/../build/include -L$(pwd)/../build/backend/ -fPIC -Dsanei_ioperm=ioperm -Dsanei_inb=inb -Dsanei_outb=outb"
+export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -isystem $(pwd)/../build/include -L$(pwd)/../build/backend/ -fPIC -Dsanei_ioperm=ioperm -Dsanei_inb=inb -Dsanei_outb=outb"
 export LDFLAGS="${RPM_OPT_FLAGS/-ffast-math/} %{?ldflags} -lusb-1.0"
+export CONFIGURE_TOP=$(pwd)
 %configure \
 	--disable-static \
 	--disable-frontend
 %make_build
 cd ..
+mv -f include/sane/sanei_directio.h.epkowa~ include/sane/sanei_directio.h
 %endif
 
 %install

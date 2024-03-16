@@ -10,3 +10,70 @@ diff -up sane-backends-1.0.27/iscan-2.30.1/backend/epkowa.c.omv~ sane-backends-1
    {
      sides = 1;                  /* put whole shift on one side */
    }
+diff -up sane-backends-1.2.1/iscan-2.30.4/backend/epkowa_ip.c.omv~ sane-backends-1.2.1/iscan-2.30.4/backend/epkowa_ip.c
+--- sane-backends-1.2.1/iscan-2.30.4/backend/epkowa_ip.c.omv~	2024-03-16 18:46:52.894907825 +0100
++++ sane-backends-1.2.1/iscan-2.30.4/backend/epkowa_ip.c	2024-03-16 18:47:24.879239866 +0100
+@@ -386,7 +386,7 @@ usb_ctrl (size_t request_type, size_t re
+ 
+   if (SANE_STATUS_GOOD == sanei_usb_control_msg (g_epson->fd, request_type,
+                                                  request, value, index,
+-                                                 &n, buffer))
++                                                 n, buffer))
+   {
+     if (size != n)
+       err_minor ("Did not read number of bytes requested");
+diff -up sane-backends-1.2.1/iscan-2.30.4/frontend/esmod-wrapper.hh.omv~ sane-backends-1.2.1/iscan-2.30.4/frontend/esmod-wrapper.hh
+diff -up sane-backends-1.2.1/iscan-2.30.4/lib/jpegstream.cc.omv~ sane-backends-1.2.1/iscan-2.30.4/lib/jpegstream.cc
+--- sane-backends-1.2.1/iscan-2.30.4/lib/jpegstream.cc.omv~	2024-03-16 18:38:40.105788766 +0100
++++ sane-backends-1.2.1/iscan-2.30.4/lib/jpegstream.cc	2024-03-16 18:39:10.178101396 +0100
+@@ -82,7 +82,7 @@ namespace iscan
+         //        only that _bits != 8.
+         for (unsigned int i = 0; i < _h_sz; ++i)
+           {
+-            div_t index = div (i, 8 * sizeof (JSAMPLE));
++            div_t index = div ((int)i, (int)8 * sizeof (JSAMPLE));
+             int offset = 8 * sizeof (JSAMPLE) - 1 - index.rem;
+             _scanline[i] = ((line[index.quot] & (1 << offset))
+                             ? 0 : ~0);
+diff -up sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.cc.omv~ sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.cc
+--- sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.cc.omv~	2024-03-16 18:39:32.478333201 +0100
++++ sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.cc	2024-03-16 18:45:48.190236047 +0100
+@@ -83,7 +83,8 @@ namespace iscan
+ #if HAVE_PNG_H
+     set_error_handler (_png, _info);
+ 
+-    if (_header && !_footer && _png->num_rows == _png->flush_rows)
++    // when not interlacing (ie, only one pass), number of rows is image height:  _v_sz
++    if (_header && !_footer && _v_sz == lib->get_current_row_number(_png))
+       {
+         lib->write_end (_png, _info);
+         _footer = true;
+@@ -157,6 +158,7 @@ namespace iscan
+     funcsym (write_row);
+     funcsym (write_flush);
+     funcsym (write_end);
++    funcsym (get_current_row_number);
+ 
+     if (lib->access_version_number
+         && lib->create_write_struct
+@@ -169,7 +171,8 @@ namespace iscan
+         && lib->write_info
+         && lib->write_row
+         && lib->write_flush
+-        && lib->write_end)
++        && lib->write_end
++	&& lib->get_current_row_number)
+       {
+         lib->is_usable = (PNG_LIBPNG_VER <= lib->access_version_number ());
+       }
+diff -up sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.hh.omv~ sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.hh
+--- sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.hh.omv~	2024-03-16 18:45:49.946254279 +0100
++++ sane-backends-1.2.1/iscan-2.30.4/lib/pngstream.hh	2024-03-16 18:46:08.954451634 +0100
+@@ -108,6 +108,7 @@ namespace iscan
+                png_structp);
+       fundecl (void, write_end,
+                png_structp, png_infop);
++      fundecl (png_uint_32, get_current_row_number, png_structp);
+ #endif /* HAVE_PNG_H */
+     };
+     static png_lib_handle *lib;
