@@ -6,10 +6,14 @@
 %define iscanversion 2.30.4
 %define beta %nil
 %define major 1
-%define libname %mklibname %{name} %{major}
-%define devname %mklibname %{name} %{major} -d
-%define lib32name %mklib32name %{name} %{major}
-%define dev32name %mklib32name %{name} %{major} -d
+%define oldlibname %mklibname %{name} 1
+%define libname %mklibname %{name}
+%define olddevname %mklibname %{name} 1 -d
+%define devname %mklibname %{name} -d
+%define oldlib32name %mklib32name %{name} 1
+%define lib32name %mklib32name %{name}
+%define olddev32name %mklib32name %{name} 1 -d
+%define dev32name %mklib32name %{name} -d
 
 %define _disable_lto 1
 %define _disable_rebuild_configure 1
@@ -146,6 +150,7 @@ to enable it, install the saned package.
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Summary:	SANE - local and remote scanner access. This package contains the sane library
+%rename %{oldlibname}
 
 %description -n %{libname}
 This package contains the shared libraries for %{name}.
@@ -156,6 +161,7 @@ License:	LGPL
 Summary:	SANE - local and remote scanner access
 Requires:	%{libname} = %{version}-%{release}
 Provides:	sane-devel = %{version}-%{release}
+%rename %{olddevname}
 
 %description -n %{devname}
 This package contains the headers and development libraries necessary 
@@ -166,9 +172,6 @@ Group:		System/Kernel and hardware
 License:	LGPLv2
 Summary:	SANE - local and remote scanner access
 Provides:	%{name} = %{version}-%{release}
-%if %{with epkowa}
-Suggests:	iscan
-%endif
 
 %description backends
 This package contains the backends for different scanners.
@@ -212,6 +215,7 @@ access image acquisition devices available on the local host.
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Summary:	SANE - local and remote scanner access. This package contains the sane library (32-bit)
+%rename %{oldlib32name}
 
 %description -n %{lib32name}
 This package contains the shared libraries for %{name}.
@@ -222,6 +226,7 @@ License:	LGPL
 Summary:	SANE - local and remote scanner access (32-bit)
 Requires:	%{devname} = %{version}-%{release}
 Requires:	%{lib32name} = %{version}-%{release}
+%rename %{olddev32name}
 
 %description -n %{dev32name}
 This package contains the headers and development libraries necessary 
