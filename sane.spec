@@ -38,9 +38,14 @@
 %else
 %bcond_with primax
 %endif
+%ifarch %{ix86} %{x86_64}
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
 %bcond_without epkowa
+%else
+# ioperm, inb, outb are x86-isms
+%bcond_with epkowa
+%endif
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
