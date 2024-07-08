@@ -4,4 +4,4 @@ sources:
   sane-backend-geniusvp2_1.0.16.1.tar.gz: 4af825c231c8c048f8145af26b8fda3b66cb8be8
   sane-driver-0.2.tar.bz2: 5364b5fd66788908e989c58c1afa3ce4cfcf8104
   sane_hp_rts88xx-0.18.tar.bz2: 213b4f9696c2684b5fc45ce8f77b6f6fed4afaca
-  sane-backends-1.2.1.tar.gz: 849c5970b8160408637c2ae1680dfc977cda6747
+  backends-release-1.3.1.tar.bz2: a427ac44a6a0d1c532cec66a2699a6671b30cff0

@@ -49,14 +49,14 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.2.1
-Release:	4
+Version:	1.3.1
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
 Url:		http://www.sane-project.org/
-Source0:	https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/sane-backends-%{version}.tar.gz
+Source0:	https://gitlab.com/sane-project/backends/-/archive/release-%{version}/backends-release-%{version}.tar.bz2
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
@@ -239,22 +239,22 @@ to develop applications using SANE.
 %endif
 
 %prep
-%setup -qn sane-backends-%{version}
+%setup -qn backends-release-%{version}
 
-%patch0 -p1 -b .plusteks12
-%patch2 -p1 -b .brother2list
-%patch3 -p1 -b .strformat
+%patch 0 -p1 -b .plusteks12
+%patch 2 -p1 -b .brother2list
+%patch 3 -p1 -b .strformat
 
-%patch11 -p1
+%patch 11 -p1
 
 # Fedora patches
-%patch21 -p1 -b .udev
-%patch22 -p1 -b .net
+%patch 21 -p1 -b .udev
+%patch 22 -p1 -b .net
 
 # Primax parallel port scanners
 %if %{with primax}
-%setup -q -T -D -a 3 -n sane-backends-%{version}
-%patch34 -p1
+%setup -q -T -D -a 3 -n backends-release-%{version}
+%patch 34 -p1
 # "primascan" backend
 # (commented out in dll.conf, as it claims to support every USB scanner)
 cat %{SOURCE11} > backend/primascan.h
@@ -270,7 +270,7 @@ perl -pi -e "s@/lib/@/%_lib/@" primaxscan*/configure
 
 # Epson Avasys driver for Epson scanners
 %if %{with epkowa}
-%setup -q -T -D -a 13 -n sane-backends-%{version}
+%setup -q -T -D -a 13 -n backends-release-%{version}
 %endif
 
 # lib64 fixes (avoid patch)
@@ -283,11 +283,11 @@ perl -p -i -e 's:for \(retries = 20; retries; retries--\):for (retries = 5; retr
 
 %if %{with epkowa}
 cd iscan-%{iscanversion}
-%patch5 -p2 -b .epkowa~
-%patch30 -p0
-%patch31 -p0
-%patch32 -p0
-%patch33 -p2
+%patch 5 -p2 -b .epkowa~
+%patch 30 -p0
+%patch 31 -p0
+%patch 32 -p0
+%patch 33 -p2
 cd -
 %endif
 
