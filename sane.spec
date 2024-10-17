@@ -55,7 +55,7 @@ Release:	1
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
-Url:		http://www.sane-project.org/
+Url:		https://www.sane-project.org/
 Source0:	https://gitlab.com/sane-project/backends/-/archive/release-%{version}/backends-release-%{version}.tar.bz2
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
