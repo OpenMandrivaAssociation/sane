@@ -98,6 +98,8 @@ Patch33:	iscan-2.28.1-linkage_fix.patch
 
 Patch34:	aarch64-io-header.patch
 
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	autoconf automake autoconf-archive
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
