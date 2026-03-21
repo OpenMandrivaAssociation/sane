@@ -50,7 +50,7 @@
 Summary:	SANE - local and remote scanner access
 Name:		sane
 Version:	1.3.1
-Release:	1
+Release:	2
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
@@ -113,7 +113,7 @@ BuildRequires:	pkgconfig(libusb-1.0)
 BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
 BuildRequires:	pkgconfig(systemd)
-BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(libxml-2.0) >= 2.15.2
 %if %{with gphoto2}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
@@ -133,7 +133,7 @@ BuildRequires:	devel(libjpeg)
 BuildRequires:	devel(libtiff)
 BuildRequires:	devel(libusb-1.0)
 BuildRequires:	devel(libsystemd)
-BuildRequires:	devel(libxml2)
+BuildRequires:	devel(libxml2) >= 2.15.2
 BuildRequires:	devel(libudev)
 BuildRequires:	devel(libcurl)
 BuildRequires:	devel(libv4l2)
