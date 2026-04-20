@@ -256,7 +256,7 @@ to develop applications using SANE.
 
 # Primax parallel port scanners
 %if %{with primax}
-%setup -q -T -D -a 3 -n backends-release-%{version}
+%setup -q -T -D -a 3 -n backends-%{version}
 %patch 34 -p1
 # "primascan" backend
 # (commented out in dll.conf, as it claims to support every USB scanner)
