@@ -254,6 +254,7 @@ to develop applications using SANE.
 # Fedora patches
 %patch 21 -p1 -b .udev
 %patch 22 -p1 -b .net
+%patch 23 -p1 -b
 
 # Primax parallel port scanners
 %if %{with primax}
