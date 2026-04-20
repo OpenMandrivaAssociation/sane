@@ -89,6 +89,7 @@ Patch11:	06_cap_always_settable.dpatch
 # (tpg) based on https://src.fedoraproject.org/rpms/sane-backends/raw/rawhide/f/sane-backends-1.0.25-udev.patch
 Patch21:	sane-backends-1.0.32-udev.patch
 Patch22:	xsane-network.patch
+Patch23:	gphoto2-gcc16-ftbfs.patch
 
 # for iscan source
 Patch30:	iscan-2.28.1-fix-preserving-lc_ctype.patch
