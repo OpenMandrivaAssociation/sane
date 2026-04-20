@@ -41,7 +41,7 @@
 %ifarch %{ix86} %{x86_64}
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
-%bcond_without epkowa
+%bcond_with epkowa
 %else
 # ioperm, inb, outb are x86-isms
 %bcond_with epkowa
