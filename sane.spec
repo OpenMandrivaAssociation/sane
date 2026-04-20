@@ -273,7 +273,7 @@ perl -pi -e "s@/lib/@/%_lib/@" primaxscan*/configure
 
 # Epson Avasys driver for Epson scanners
 %if %{with epkowa}
-%setup -q -T -D -a 13 -n backends-release-%{version}
+%setup -q -T -D -a 13 -n backends-%{version}
 %endif
 
 # lib64 fixes (avoid patch)
