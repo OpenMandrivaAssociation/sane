@@ -49,14 +49,14 @@
 
 Summary:	SANE - local and remote scanner access
 Name:		sane
-Version:	1.3.1
-Release:	2
+Version:	1.4.0
+Release:	1
 # lib/ is LGPLv2+, backends are GPLv2+ with exceptions
 # Tools are GPLv2+, docs are public domain
 License: 	GPLv2+ and GPLv2+ with exceptions and Public Domain
 Group:		Graphics
 Url:		https://www.sane-project.org/
-Source0:	https://gitlab.com/sane-project/backends/-/archive/release-%{version}/backends-release-%{version}.tar.bz2
+Source0:	https://gitlab.com/sane-project/backends/-/archive/%{version}/backends-%{version}.tar.bz2
 Source3:	http://belnet.dl.sourceforge.net/sourceforge/px-backend/primaxscan-1.1.beta1.tar.bz2
 Source9:	http://heanet.dl.sourceforge.net/sourceforge/hp44x0backend/sane_hp_rts88xx-0.18.tar.bz2
 Source10:	http://heanet.dl.sourceforge.net/sourceforge/brother-mfc/sane-driver-0.2.tar.bz2
@@ -242,7 +242,7 @@ to develop applications using SANE.
 %endif
 
 %prep
-%setup -qn backends-release-%{version}
+%setup -qn backends-%{version}
 
 %patch 0 -p1 -b .plusteks12
 %patch 2 -p1 -b .brother2list
