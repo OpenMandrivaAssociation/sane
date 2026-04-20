@@ -368,8 +368,11 @@ sed -i -e 's,extern int sanei_ioperm,//,;s,extern unsigned char sanei_inb,//,;s,
 chmod a+rx build/tools/sane-config
 PATH=$(pwd)/build/tools:${PATH}
 cd iscan-%{iscanversion}
-cp -f /usr/share/aclocal/libtool.m4 m4/.
-autoreconf -fi
+libtoolize --force --copy
+aclocal -I m4
+autoheader
+autoconf
+automake --add-missing --copy
 export CFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -isystem $(pwd)/../build/include -L$(pwd)/../build/backend/ -fPIC -Dsanei_ioperm=ioperm -Dsanei_inb=inb -Dsanei_outb=outb"
 export CXXFLAGS="${RPM_OPT_FLAGS/-ffast-math/} $(pkg-config --cflags libusb-1.0) -I$(pwd)/../include -isystem $(pwd)/../build/include -L$(pwd)/../build/backend/ -fPIC -Dsanei_ioperm=ioperm -Dsanei_inb=inb -Dsanei_outb=outb"
 export LDFLAGS="${RPM_OPT_FLAGS/-ffast-math/} %{?ldflags} -lusb-1.0"
