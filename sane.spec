@@ -310,6 +310,8 @@ fi
 [ -e configure ] || ./autogen.sh
 
 %build
+export CFLAGS="%{optflags} -std=gnu17"
+export CXXFLAGS="%{optflags} -std=gnu17"
 export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 mkdir build32
