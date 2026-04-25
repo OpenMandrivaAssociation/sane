@@ -31,17 +31,17 @@
 
 %bcond_without gphoto2
 %bcond_without v4l
-%ifnarch alpha ppc sparc %{armx}
-# Switch to disable the compilation of the "primax" backend in case of
-# problems
+%ifarch %{ix86} %{x86_64}
 %bcond_with primax
 %else
+# Switch to disable the compilation of the "primax" backend in case of
+# problems
 %bcond_with primax
 %endif
 %ifarch %{ix86} %{x86_64}
 # Switch to disable the compilation of the "epkowa" backend in case of
 # problems
-%bcond_with epkowa
+%bcond_without epkowa
 %else
 # ioperm, inb, outb are x86-isms
 %bcond_with epkowa
@@ -96,6 +96,7 @@ Patch30:	iscan-2.28.1-fix-preserving-lc_ctype.patch
 Patch31:	iscan-2.30.4-fix-link.patch
 Patch32:	iscan-2.20.1-no_non-free_please.diff
 Patch33:	iscan-2.28.1-linkage_fix.patch
+Patch35:	iscan-2.30.4-compile.patch
 
 Patch34:	aarch64-io-header.patch
 
@@ -290,6 +291,7 @@ cd iscan-%{iscanversion}
 %patch 31 -p0
 %patch 32 -p0
 %patch 33 -p2
+%patch 35 -p1
 cd -
 %endif
 
@@ -386,7 +388,7 @@ mv -f include/sane/sanei_directio.h.epkowa~ include/sane/sanei_directio.h
 
 %install
 %if %{with compat32}
-%make_install -C build32
+%make_install -C build32 CPPFLAGS="-isystem %{_includedir}" IEEE1284_LIBS="-L%{_prefix}/lib -lieee1284"
 %endif
 %make_install -C build
 
