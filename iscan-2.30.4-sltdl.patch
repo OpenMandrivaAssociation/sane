@@ -1,0 +1,36 @@
+diff -up iscan-2.30.4/backend/backend.c.omv~ iscan-2.30.4/backend/backend.c
+--- iscan-2.30.4/backend/backend.c.omv~	2026-04-25 16:39:39.439107393 +0200
++++ iscan-2.30.4/backend/backend.c	2026-04-25 16:39:59.655689972 +0200
+@@ -74,7 +74,7 @@
+ #define BACKEND_SOURCE PACKAGE_STRING
+ 
+ #include <errno.h>
+-#include <ltdl.h>
++#include <sltdl/sltdl.h>
+ #include <string.h>
+ 
+ #include "cfg-obj.h"
+diff -up iscan-2.30.4/backend/epkowa_ip.h.omv~ iscan-2.30.4/backend/epkowa_ip.h
+--- iscan-2.30.4/backend/epkowa_ip.h.omv~	2026-04-25 16:40:07.263429507 +0200
++++ iscan-2.30.4/backend/epkowa_ip.h	2026-04-25 16:40:12.171726155 +0200
+@@ -52,7 +52,7 @@
+ #ifndef epkowa_ip_h_included
+ #define epkowa_ip_h_included
+ 
+-#include <ltdl.h>
++#include <sltdl/sltdl.h>
+ 
+ #include "epkowa.h"
+ #include "epkowa_ip_api.h"
+diff -up iscan-2.30.4/backend/get-infofile.c.omv~ iscan-2.30.4/backend/get-infofile.c
+--- iscan-2.30.4/backend/get-infofile.c.omv~	2026-04-25 16:40:19.955576337 +0200
++++ iscan-2.30.4/backend/get-infofile.c	2026-04-25 16:40:24.661986683 +0200
+@@ -63,7 +63,7 @@
+ 
+ 
+ #include <errno.h>
+-#include <ltdl.h>
++#include <sltdl/sltdl.h>
+ #include <string.h>
+ 
+ #include "get-infofile.h"

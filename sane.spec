@@ -97,6 +97,7 @@ Patch31:	iscan-2.30.4-fix-link.patch
 Patch32:	iscan-2.20.1-no_non-free_please.diff
 Patch33:	iscan-2.28.1-linkage_fix.patch
 Patch35:	iscan-2.30.4-compile.patch
+Patch36:	iscan-2.30.4-sltdl.patch
 
 Patch34:	aarch64-io-header.patch
 
@@ -116,6 +117,7 @@ BuildRequires:	pkgconfig(avahi-client)
 BuildRequires:	avahi-common-devel
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libxml-2.0) >= 2.15.2
+BuildRequires:	pkgconfig(sltdl)
 %if %{with gphoto2}
 BuildRequires:	pkgconfig(libgphoto2)
 %endif
@@ -293,6 +295,9 @@ cd iscan-%{iscanversion}
 %patch 32 -p0
 %patch 33 -p2
 %patch 35 -p1
+%patch 36 -p1
+slibtoolize --force
+autoreconf
 cd -
 %endif
 
