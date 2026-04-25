@@ -1,0 +1,58 @@
+diff -up iscan-2.30.4/backend/defines.h.omv~ iscan-2.30.4/backend/defines.h
+--- iscan-2.30.4/backend/defines.h.omv~	2026-04-25 15:32:14.639635046 +0200
++++ iscan-2.30.4/backend/defines.h	2026-04-25 15:32:23.205430499 +0200
+@@ -30,16 +30,6 @@ extern "C"
+ #define MM_PER_INCH     25.4    /* exactly */
+ 
+ 
+-#ifndef __cplusplus
+-/*! A C++ Boolean type and corresponding keywords for our C code.
+- */
+-typedef enum {
+-  false = 0,
+-  true
+-} bool;
+-#endif
+-
+-
+ /*  Run-time contract validation.
+  */
+ #include <stdlib.h>
+diff -up iscan-2.30.4/configure.ac.omv~ iscan-2.30.4/configure.ac
+--- iscan-2.30.4/configure.ac.omv~	2026-04-25 15:31:24.755111591 +0200
++++ iscan-2.30.4/configure.ac	2026-04-25 15:31:24.755929500 +0200
+@@ -268,12 +268,12 @@ dnl  The somewhat obscure LT_AC_PROG_SED
+ dnl  SED environment variable gets set before it's used by the libtool
+ dnl  machinery.  This works around buggy libtool versions.
+ LT_AC_PROG_SED
+-AC_LIBLTDL_INSTALLABLE
++dnl AC_LIBLTDL_INSTALLABLE
+ AC_LIBTOOL_DLOPEN
+ AC_PROG_LIBTOOL
+-AC_LIB_LTDL
+-AC_SUBST(LTDLINCL)
+-AC_SUBST(LIBLTDL)
++dnl AC_LIB_LTDL
++dnl AC_SUBST(LTDLINCL)
++dnl AC_SUBST(LIBLTDL)
+ 
+ 
+ dnl  Graphic file format options
+diff -up iscan-2.30.4/backend/dip-obj.c.omv~ iscan-2.30.4/backend/dip-obj.c
+--- iscan-2.30.4/backend/dip-obj.c.omv~	2026-04-25 15:36:20.778131475 +0200
++++ iscan-2.30.4/backend/dip-obj.c	2026-04-25 15:43:12.308880658 +0200
+@@ -89,11 +89,13 @@
+       : (v)))          \
+   /**/
+ 
++#pragma GCC diagnostic ignored "-Wincompatible-function-pointer-types"
++
+ typedef struct
+ {
+   process *plugin;
+ 
+-  void (*autocrop) ();
++  void (*autocrop) (buffer *, ...);
+   void (*deskew) (buffer *, int, int);
+ 
+ } dip_type;
