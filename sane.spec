@@ -100,13 +100,11 @@ Patch33:	iscan-2.28.1-linkage_fix.patch
 Patch34:	aarch64-io-header.patch
 
 BuildRequires:	make
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	autoconf automake autoconf-archive
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
 BuildRequires:	ieee1284-devel
-BuildRequires:	libtool-devel
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(gtk+-2.0)
@@ -130,7 +128,6 @@ BuildConflicts:	resmgr-devel
 %if %{with compat32}
 # BuildRequires:	devel(libintl)
 BuildRequires:	devel(libieee1284)
-BuildRequires:	devel(libltdl)
 BuildRequires:	devel(libjpeg)
 BuildRequires:	devel(libtiff)
 BuildRequires:	devel(libusb-1.0)
@@ -316,7 +313,7 @@ export CONFIGURE_TOP="$(pwd)"
 %if %{with compat32}
 mkdir build32
 cd build32
-CPPFLAGS="$(pkg-config --cflags libusb-1.0 libgphoto2)" %configure32 \
+CPPFLAGS="$(pkg-config --cflags libusb-1.0 libgphoto2) -isystem %{_includedir}" %configure32 \
 	--enable-rpath \
 	--enable-libusb_1_0
 
@@ -338,7 +335,7 @@ CPPFLAGS="$(pkg-config --cflags libusb-1.0 libgphoto2)" %configure \
 cd ..
 
 %if %{with compat32}
-%make_build -C build32 GPHOTO2_CPPFLAGS="$(pkg-config --cflags-only-I libgphoto2)"
+%make_build -C build32 GPHOTO2_CPPFLAGS="$(pkg-config --cflags-only-I libgphoto2)" CPPFLAGS="-isystem %{_includedir}"
 %endif
 %make_build -C build
 
@@ -370,7 +367,7 @@ sed -i -e 's,extern int sanei_ioperm,//,;s,extern unsigned char sanei_inb,//,;s,
 chmod a+rx build/tools/sane-config
 PATH=$(pwd)/build/tools:${PATH}
 cd iscan-%{iscanversion}
-libtoolize --force --copy
+slibtoolize --force --copy
 aclocal -I m4
 autoheader
 autoconf
