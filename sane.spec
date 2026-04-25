@@ -102,6 +102,7 @@ Patch34:	aarch64-io-header.patch
 
 BuildRequires:	make
 BuildRequires:	slibtool
+BuildRequires:	libtool-autoconf-macros
 BuildRequires:	autoconf automake autoconf-archive
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
